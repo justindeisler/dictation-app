@@ -18,6 +18,7 @@
 		E40000271234567890123456 /* AudioRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40000281234567890123456 /* AudioRecorder.swift */; };
 		E40000291234567890123456 /* HotkeyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E400002A1234567890123456 /* HotkeyManager.swift */; };
 		E400002B1234567890123456 /* KeyboardShortcuts in Frameworks */ = {isa = PBXBuildFile; productRef = E400002C1234567890123456 /* KeyboardShortcuts */; };
+		E400002E1234567890123456 /* TranscriptionResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = E400002F1234567890123456 /* TranscriptionResult.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,6 +34,7 @@
 		E40000261234567890123456 /* PermissionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionManager.swift; sourceTree = "<group>"; };
 		E40000281234567890123456 /* AudioRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioRecorder.swift; sourceTree = "<group>"; };
 		E400002A1234567890123456 /* HotkeyManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HotkeyManager.swift; sourceTree = "<group>"; };
+		E400002F1234567890123456 /* TranscriptionResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranscriptionResult.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,10 +64,19 @@
 			isa = PBXGroup;
 			children = (
 				E400000D1234567890123456 /* App */,
+				E40000301234567890123456 /* Models */,
 				E400001B1234567890123456 /* Services */,
 				E40000221234567890123456 /* Views */,
 			);
 			path = Sources;
+			sourceTree = "<group>";
+		};
+		E40000301234567890123456 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				E400002F1234567890123456 /* TranscriptionResult.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 		E400001B1234567890123456 /* Services */ = {
@@ -191,6 +202,7 @@
 				E40000251234567890123456 /* PermissionManager.swift in Sources */,
 				E40000271234567890123456 /* AudioRecorder.swift in Sources */,
 				E40000291234567890123456 /* HotkeyManager.swift in Sources */,
+				E400002E1234567890123456 /* TranscriptionResult.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
