@@ -8,6 +8,7 @@ struct SettingsView: View {
     @State private var validationError: String = ""
 
     @AppStorage("transcriptionLanguage") private var languagePreference: String = "auto"
+    @State private var originalLanguagePreference: String = "auto"
 
     @Environment(\.dismiss) private var dismiss
 
@@ -54,7 +55,8 @@ struct SettingsView: View {
             // Button bar - explicit save behavior per user decision
             HStack(spacing: 12) {
                 Button("Cancel") {
-                    apiKey = originalAPIKey  // Discard changes
+                    apiKey = originalAPIKey  // Discard API key changes
+                    languagePreference = originalLanguagePreference  // Discard language changes
                     closeWindow()
                 }
                 .keyboardShortcut(.cancelAction)
@@ -76,7 +78,7 @@ struct SettingsView: View {
                     }
                 }
                 .keyboardShortcut(.defaultAction)
-                .disabled(apiKey.isEmpty || apiKey == originalAPIKey || isValidating)
+                .disabled(isValidating || !hasChanges)
             }
             .padding()
             .background(Color(nsColor: .windowBackgroundColor))
@@ -92,25 +94,39 @@ struct SettingsView: View {
         }
     }
 
+    /// Check if any settings have changed from their original values
+    private var hasChanges: Bool {
+        let apiKeyChanged = !apiKey.isEmpty && apiKey != originalAPIKey
+        let languageChanged = languagePreference != originalLanguagePreference
+        return apiKeyChanged || languageChanged
+    }
+
     private func loadCurrentSettings() {
         if let savedKey = KeychainManager.shared.loadAPIKey() {
             apiKey = savedKey
             originalAPIKey = savedKey
         }
+        originalLanguagePreference = languagePreference
     }
 
     private func validateAndSave() async {
         isValidating = true
 
         do {
-            // User decision: auto-validate on save
-            try await APIClient.shared.validateAPIKey(apiKey)
+            // Only validate and save API key if it changed
+            let apiKeyChanged = !apiKey.isEmpty && apiKey != originalAPIKey
+            if apiKeyChanged {
+                // User decision: auto-validate on save
+                try await APIClient.shared.validateAPIKey(apiKey)
 
-            // Save to Keychain
-            try KeychainManager.shared.saveAPIKey(apiKey)
+                // Save to Keychain
+                try KeychainManager.shared.saveAPIKey(apiKey)
+            }
 
-            // Update original to prevent re-save prompt
+            // Update originals to prevent re-save prompt
+            // (Language is already saved via @AppStorage)
             originalAPIKey = apiKey
+            originalLanguagePreference = languagePreference
 
             // Close window on success
             await MainActor.run {
