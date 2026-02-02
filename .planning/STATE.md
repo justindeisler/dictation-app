@@ -4,9 +4,9 @@
 
 ## Current Status
 
-- **Phase:** 3 of 5 (Transcription & API) - In Progress
-- **Active Plan:** 03-01 complete
-- **Status:** Phase 3 in progress
+- **Phase:** 3 of 5 (Transcription & API) - Complete
+- **Active Plan:** 03-02 complete
+- **Status:** Ready for Phase 4
 
 ## Project Reference
 
@@ -20,12 +20,12 @@
 
 ## Current Position
 
-**Phase:** 3 of 5 (Transcription & API) - In Progress
-**Plan:** 03-01 complete
-**Progress:** ●●◐○○ (2 phases complete, 1 in progress)
+**Phase:** 3 of 5 (Transcription & API) - Complete
+**Plan:** 03-02 complete (Phase 3 finished)
+**Progress:** ●●●○○ (3 phases complete)
 
 ```
-[██████████████████████████████──────────] ~50%
+[████████████████████████████████████────] ~60%
 ```
 
 ## Phase Progress
@@ -34,7 +34,7 @@
 |-------|------|--------|-------|--------------|
 | 1 | Foundation & Settings | ● Complete | 3/3 | 5 (SET-01 to SET-05) |
 | 2 | Core Recording & Permissions | ● Complete | 2/2 | 7 (REC-01 to REC-04, PRM-01 to PRM-03) |
-| 3 | Transcription & API | ◐ In Progress | 1/? | 5 (TRX-01 to TRX-05) |
+| 3 | Transcription & API | ● Complete | 2/2 | 5 (TRX-01 to TRX-05) |
 | 4 | Output & Paste | ○ Pending | 0/? | 3 (OUT-01 to OUT-03) |
 | 5 | Error Handling & Polish | ○ Pending | 0/? | 4 (ERR-01 to ERR-04) |
 
@@ -66,6 +66,8 @@
 | SF Symbol palette configuration | contentTintColor unreliable for menu bar icons | 2026-02-02 |
 | 60-second transcription timeout | Audio processing takes time; 10s too short | 2026-02-02 |
 | @AppStorage for language pref | Non-destructive settings auto-save immediately | 2026-02-02 |
+| NotificationCenter for transcription | Decoupled results ready for Phase 4 paste | 2026-02-02 |
+| Async Task spawn from hotkey | Non-blocking transcription from sync callback | 2026-02-02 |
 
 ### Active TODOs
 
@@ -78,8 +80,9 @@
 - [x] Execute Plan 02-02 (Hotkey and Recording integration)
 - [x] Complete Phase 2
 - [x] Execute Plan 03-01 (Transcription API & Language Settings)
-- [ ] Continue Phase 3 (wire transcription to recording)
-- [ ] Complete Phase 3
+- [x] Execute Plan 03-02 (TranscriptionManager integration)
+- [x] Complete Phase 3
+- [ ] Execute Phase 4 (Output & Paste)
 
 ### Known Blockers
 
@@ -129,24 +132,29 @@ None currently.
 - UUID boundary for multipart collision resistance
 - @AppStorage for instant-persist preferences without Save button
 
+**Patterns Established (Plan 03-02):**
+- NotificationCenter broadcasting for transcription results
+- Async Task spawning from synchronous hotkey callbacks
+- Service orchestration: TranscriptionManager coordinates HotkeyManager -> APIClient
+- Language preference flow: UserDefaults -> TranscriptionManager -> APIClient
+
 ## Session Continuity
 
-**Last Session:** 2026-02-02T17:12:00Z
-**Stopped at:** Completed Plan 03-01
+**Last Session:** 2026-02-02
+**Stopped at:** Completed Plan 03-02 (Phase 3 complete)
 **Resume file:** None
 
-**Next Step:** Continue Phase 3 (wire transcription to recording completion)
+**Next Step:** Begin Phase 4 (Output & Paste)
 
 **Context for Next Session:**
-- Plan 03-01 complete: Transcription API and language settings ready
-- APIClient.transcribe(audioURL:language:) method implemented
-- TranscriptionResult model in Sources/Models/
-- Language preference stored in UserDefaults ("transcriptionLanguage")
-- Next: Wire recordingDidStop notification to transcription call
-- Requirements covered: TRX-01, TRX-02 (partial), TRX-03 (language setting)
+- Phase 3 complete: All TRX requirements verified
+- TranscriptionManager handles recording -> transcription flow
+- `.transcriptionDidComplete` notification broadcasts text results
+- Ready for Phase 4: Wire notification to CGEvent paste
+- Requirements ready: OUT-01 to OUT-03
 
 ---
 
 *State initialized: 2026-02-02*
-*Last plan completed: 03-01 SUMMARY (2026-02-02)*
-*Phase 3 in progress*
+*Last plan completed: 03-02 SUMMARY (2026-02-02)*
+*Phase 3 complete - Ready for Phase 4*
