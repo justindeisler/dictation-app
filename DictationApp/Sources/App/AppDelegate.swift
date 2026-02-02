@@ -1,7 +1,8 @@
 import AppKit
 import SwiftUI
 
-class AppDelegate: NSObject, NSApplicationDelegate {
+@MainActor
+class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     var statusItem: NSStatusItem?
     var settingsWindowController: NSWindowController?
 
@@ -45,14 +46,25 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         // Launch at login toggle
         let launchToggle = NSMenuItem(title: "Launch at Login", action: #selector(toggleLaunchAtLogin(_:)), keyEquivalent: "")
-        launchToggle.state = .off  // Will be updated in Plan 03
+        // User decision: reflect actual system state
+        launchToggle.state = LoginItemManager.shared.isEnabled() ? .on : .off
         menu.addItem(launchToggle)
         menu.addItem(NSMenuItem.separator())
 
         // Quit (Cmd+Q)
         menu.addItem(NSMenuItem(title: "Quit DictationApp", action: #selector(quit), keyEquivalent: "q"))
 
+        menu.delegate = self
         statusItem?.menu = menu
+    }
+
+    // MARK: - NSMenuDelegate
+
+    func menuWillOpen(_ menu: NSMenu) {
+        // Update Launch at Login state each time menu opens
+        if let launchItem = menu.item(withTitle: "Launch at Login") {
+            launchItem.state = LoginItemManager.shared.isEnabled() ? .on : .off
+        }
     }
 
     @objc func openSettings() {
@@ -81,8 +93,24 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     @objc func toggleLaunchAtLogin(_ sender: NSMenuItem) {
-        // Placeholder - implemented in Plan 03
-        sender.state = sender.state == .on ? .off : .on
+        let manager = LoginItemManager.shared
+        let currentState = manager.isEnabled()
+
+        do {
+            try manager.setEnabled(!currentState)
+            // User decision: reflect actual system state after change
+            sender.state = manager.isEnabled() ? .on : .off
+        } catch {
+            // Show error but don't change toggle state
+            let alert = NSAlert()
+            alert.messageText = "Unable to Change Launch at Login"
+            alert.informativeText = error.localizedDescription
+            alert.alertStyle = .warning
+            alert.runModal()
+
+            // Ensure toggle reflects actual state
+            sender.state = manager.isEnabled() ? .on : .off
+        }
     }
 
     @objc func quit() {
