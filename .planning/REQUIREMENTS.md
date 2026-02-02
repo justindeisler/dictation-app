@@ -24,9 +24,9 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Output
 
-- [ ] **OUT-01**: Transcribed text is pasted into the currently active text field
-- [ ] **OUT-02**: Paste works across all standard macOS applications
-- [ ] **OUT-03**: User does not need to manually paste (automatic insertion)
+- [x] **OUT-01**: Transcribed text is pasted into the currently active text field
+- [x] **OUT-02**: Paste works across all standard macOS applications
+- [x] **OUT-03**: User does not need to manually paste (automatic insertion)
 
 ### Settings
 
@@ -112,9 +112,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | TRX-03 | Phase 3 | Complete |
 | TRX-04 | Phase 3 | Complete |
 | TRX-05 | Phase 3 | Complete |
-| OUT-01 | Phase 4 | Pending |
-| OUT-02 | Phase 4 | Pending |
-| OUT-03 | Phase 4 | Pending |
+| OUT-01 | Phase 4 | Complete |
+| OUT-02 | Phase 4 | Complete |
+| OUT-03 | Phase 4 | Complete |
 | ERR-01 | Phase 5 | Pending |
 | ERR-02 | Phase 5 | Pending |
 | ERR-03 | Phase 5 | Pending |
@@ -127,4 +127,4 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 ---
 *Requirements defined: 2026-02-02*
-*Last updated: 2026-02-02 after Phase 3 completion (17/24 complete)*
+*Last updated: 2026-02-02 after Phase 4 completion (20/24 complete)*

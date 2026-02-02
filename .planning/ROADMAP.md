@@ -167,7 +167,7 @@ Phase 5 (Error Handling & Polish)
 | 1 - Foundation & Settings | ● Complete | 5/5 requirements |
 | 2 - Core Recording & Permissions | ● Complete | 7/7 requirements |
 | 3 - Transcription & API | ● Complete | 5/5 requirements |
-| 4 - Output & Paste | ○ Pending | 0/3 requirements |
+| 4 - Output & Paste | ● Complete | 3/3 requirements |
 | 5 - Error Handling & Polish | ○ Pending | 0/4 requirements |
 
 **Legend:** ○ Pending | ◐ In Progress | ● Completed
@@ -196,4 +196,5 @@ Research identified 7-phase, 14-day build order. Quick depth setting compressed 
 *Roadmap created: 2026-02-02*
 *Phase 2 completed: 2026-02-02*
 *Phase 3 completed: 2026-02-02*
-*Next step: `/gsd:plan-phase 4` or `/gsd:discuss-phase 4`*
+*Phase 4 completed: 2026-02-02*
+*Next step: `/gsd:plan-phase 5` or `/gsd:discuss-phase 5`*

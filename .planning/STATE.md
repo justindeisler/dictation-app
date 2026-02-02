@@ -4,9 +4,9 @@
 
 ## Current Status
 
-- **Phase:** 4 of 5 (Output & Paste) - In Progress
-- **Active Plan:** 04-02 ready for execution
-- **Status:** 1/2 plans complete
+- **Phase:** 5 of 5 (Error Handling & Polish) - Ready to Plan
+- **Active Plan:** None - needs planning
+- **Status:** Phase 4 complete, Phase 5 pending
 
 ## Project Reference
 
@@ -20,12 +20,12 @@
 
 ## Current Position
 
-**Phase:** 4 of 5 (Output & Paste) - In Progress
-**Plan:** 04-01 complete, 04-02 ready (1/2 plans done)
-**Progress:** ●●●◐○ (3 phases complete, Phase 4 in progress)
+**Phase:** 5 of 5 (Error Handling & Polish) - Ready to Plan
+**Plan:** None - needs planning
+**Progress:** ●●●●○ (4 phases complete, Phase 5 pending)
 
 ```
-[████████████████████████████████████████] ~65%
+[████████████████████████████████████████] ~80%
 ```
 
 ## Phase Progress
@@ -35,16 +35,16 @@
 | 1 | Foundation & Settings | ● Complete | 3/3 | 5 (SET-01 to SET-05) |
 | 2 | Core Recording & Permissions | ● Complete | 2/2 | 7 (REC-01 to REC-04, PRM-01 to PRM-03) |
 | 3 | Transcription & API | ● Complete | 2/2 | 5 (TRX-01 to TRX-05) |
-| 4 | Output & Paste | ◐ In Progress | 1/2 | 3 (OUT-01 to OUT-03) |
+| 4 | Output & Paste | ● Complete | 2/2 | 3 (OUT-01 to OUT-03) |
 | 5 | Error Handling & Polish | ○ Pending | 0/? | 4 (ERR-01 to ERR-04) |
 
 **Legend:** ○ Pending | ◐ In Progress | ● Completed
 
 ## Performance Metrics
 
-**Velocity:** 1 task in 3m 35s (Plan 04-01)
+**Velocity:** Plans executing in 3-15 min each
 **Quality:** Build succeeds, all verification criteria met
-**Coverage:** 25/27 requirements mapped (93%)
+**Coverage:** 20/24 requirements complete (83%)
 
 ## Accumulated Context
 
@@ -69,8 +69,9 @@
 | NotificationCenter for transcription | Decoupled results ready for Phase 4 paste | 2026-02-02 |
 | Async Task spawn from hotkey | Non-blocking transcription from sync callback | 2026-02-02 |
 | 150ms paste delay | Safe timing for clipboard-to-paste workflow | 2026-02-02 |
-| Smart spacing before paste | Natural continuation without manual spacing | 2026-02-02 |
-| Notification fallback for paste | Graceful degradation when no text field focused | 2026-02-02 |
+| Skip strict text field role check | Too restrictive - attempt paste in any context | 2026-02-02 |
+| Always copy to clipboard first | Guaranteed fallback if paste simulation fails | 2026-02-02 |
+| Accessibility guidance on failure | Clear user guidance when permission needed | 2026-02-02 |
 
 ### Active TODOs
 
@@ -87,8 +88,11 @@
 - [x] Complete Phase 3
 - [x] Plan Phase 4 (2 plans created)
 - [x] Execute Plan 04-01 (PasteManager service)
-- [ ] Execute Plan 04-02 (AppDelegate integration)
-- [ ] Complete Phase 4
+- [x] Execute Plan 04-02 (AppDelegate integration)
+- [x] Complete Phase 4
+- [ ] Plan Phase 5
+- [ ] Execute Phase 5
+- [ ] Complete Phase 5 (final phase!)
 
 ### Known Blockers
 
@@ -152,23 +156,28 @@ None currently.
 - Clipboard-write-then-paste workflow with 150ms delay
 - Notification fallback via UNUserNotificationCenter
 
+**Patterns Established (Plan 04-02):**
+- Transcription observer: .transcriptionDidComplete -> handleTranscriptionComplete -> PasteManager.pasteText
+- Notification delegate: UNUserNotificationCenterDelegate with nonisolated methods
+- Permission guidance: Show alert with System Settings deep link on failure
+- Always attempt paste regardless of detected element type
+
 ## Session Continuity
 
 **Last Session:** 2026-02-02
-**Stopped at:** Completed Plan 04-01
+**Stopped at:** Phase 4 complete
 **Resume file:** None
 
-**Next Step:** Execute Plan 04-02 (AppDelegate integration)
+**Next Step:** Plan Phase 5 (Error Handling & Polish)
 
 **Context for Next Session:**
-- Plan 04-01 complete: PasteManager service created
-- PasteManager.pasteText() available for AppDelegate integration
-- Plan 04-02: Wire transcription notification observer to PasteManager
-- Plan 04-02: Configure UNUserNotificationCenter delegate
-- Wave structure: 04-01 (wave 1 ✓) -> 04-02 (wave 2)
+- Phase 4 complete: All OUT requirements verified, automatic paste working
+- End-to-end workflow complete: hotkey → record → transcribe → paste
+- Phase 5 requirements: ERR-01 to ERR-04 (error notifications, graceful handling)
+- Foundation in place: notification infrastructure, permission guidance patterns
 
 ---
 
 *State initialized: 2026-02-02*
-*Last plan completed: 04-01 SUMMARY (2026-02-02)*
-*Phase 4 in progress - 1/2 plans complete*
+*Last plan completed: 04-02 SUMMARY (2026-02-02)*
+*Phase 4 complete - Ready for Phase 5 planning*
