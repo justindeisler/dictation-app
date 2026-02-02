@@ -4,9 +4,9 @@
 
 ## Current Status
 
-- **Phase:** 2 of 5 (Core Recording & Permissions)
-- **Active Plan:** 02-01 SUMMARY created
-- **Status:** Phase 2 in progress
+- **Phase:** 2 of 5 (Core Recording & Permissions) ✅ COMPLETE
+- **Active Plan:** None - Phase 2 complete
+- **Status:** Ready for Phase 3
 
 ## Project Reference
 
@@ -20,12 +20,12 @@
 
 ## Current Position
 
-**Phase:** 2 of 5 (Core Recording & Permissions)
-**Plan:** 02-01 complete (Permission/Audio services), continuing to 02-02
-**Progress:** ●◐○○○ (1 phase complete, 1 in progress)
+**Phase:** 2 of 5 (Core Recording & Permissions) ✅ Complete
+**Plan:** All plans complete (02-01, 02-02)
+**Progress:** ●●○○○ (2 phases complete)
 
 ```
-[████████████████────────────────────────] ~28%
+[████████████████████████────────────────] ~40%
 ```
 
 ## Phase Progress
@@ -33,7 +33,7 @@
 | Phase | Name | Status | Plans | Requirements |
 |-------|------|--------|-------|--------------|
 | 1 | Foundation & Settings | ● Complete | 3/3 | 5 (SET-01 to SET-05) |
-| 2 | Core Recording & Permissions | ◐ In Progress | 1/? | 7 (REC-01 to REC-04, PRM-01 to PRM-03) |
+| 2 | Core Recording & Permissions | ● Complete | 2/2 | 7 (REC-01 to REC-04, PRM-01 to PRM-03) |
 | 3 | Transcription & API | ○ Pending | 0/? | 5 (TRX-01 to TRX-05) |
 | 4 | Output & Paste | ○ Pending | 0/? | 3 (OUT-01 to OUT-03) |
 | 5 | Error Handling & Polish | ○ Pending | 0/? | 4 (ERR-01 to ERR-04) |
@@ -62,6 +62,8 @@
 | Guidance alert when blocked | Help users enable manually via System Settings | 2026-02-02 |
 | String literal for AXTrustedCheckOptionPrompt | Avoid Swift 6 concurrency warning with C global | 2026-02-02 |
 | 16kHz mono WAV format | Groq Whisper API compatibility | 2026-02-02 |
+| KeyboardShortcuts library | Sindre Sorhus's reliable global hotkey library | 2026-02-02 |
+| SF Symbol palette configuration | contentTintColor unreliable for menu bar icons | 2026-02-02 |
 
 ### Active TODOs
 
@@ -71,8 +73,10 @@
 - [x] Execute Plan 01-03 (Launch at Login)
 - [x] Phase 1 complete (all 3 plans done)
 - [x] Execute Plan 02-01 (Permission/Audio services)
-- [ ] Execute Plan 02-02 (Hotkey and Recording integration)
-- [ ] Complete Phase 2
+- [x] Execute Plan 02-02 (Hotkey and Recording integration)
+- [x] Complete Phase 2
+- [ ] Plan Phase 3 (Transcription & API)
+- [ ] Execute Phase 3
 
 ### Known Blockers
 
@@ -110,22 +114,29 @@ None currently.
 - PermissionManager for microphone/accessibility permission lifecycle
 - AudioRecorder for 16kHz mono WAV recording to temp files
 
+**Patterns Established (Plan 02-02):**
+- KeyboardShortcuts.Name extension for defining app hotkeys
+- NotificationCenter for decoupled recording state updates
+- NSImage.SymbolConfiguration(paletteColors:) for colored menu bar SF Symbols
+- HotkeyManager for centralized hotkey registration and handling
+
 ## Session Continuity
 
-**Last Session:** 2026-02-02T13:56:00Z
-**Stopped at:** Completed Plan 02-01 SUMMARY
+**Last Session:** 2026-02-02T14:10:00Z
+**Stopped at:** Completed Phase 2 (all plans done)
 **Resume file:** None
 
-**Next Step:** Execute Plan 02-02 (Hotkey and Recording integration)
+**Next Step:** Plan Phase 3 (Transcription & API)
 
 **Context for Next Session:**
-- Phase 2 Plan 1 complete: PermissionManager and AudioRecorder services
-- PermissionManager handles microphone + accessibility permissions with guidance alerts
-- AudioRecorder creates 16kHz mono WAV files for Groq API
-- Both follow @MainActor singleton pattern
-- Requirements partially covered: PRM-01, PRM-02, PRM-03, REC-04
+- Phase 2 complete: Full recording workflow operational
+- Option+Space toggles recording with red icon feedback
+- WAV files saved to temp directory ready for transcription
+- recordingDidStop notification carries file URL for Phase 3
+- All 7 Phase 2 requirements covered (REC-01 to REC-04, PRM-01 to PRM-03)
 
 ---
 
 *State initialized: 2026-02-02*
-*Last plan completed: 02-01 SUMMARY (2026-02-02)*
+*Last plan completed: 02-02 SUMMARY (2026-02-02)*
+*Phase 2 completed: 2026-02-02*

@@ -70,8 +70,8 @@ Plans:
 **Plans:** 2 plans in 2 waves
 
 Plans:
-- [ ] 02-01-PLAN.md — Create PermissionManager and AudioRecorder foundation services
-- [ ] 02-02-PLAN.md — Implement hotkey detection and visual recording feedback
+- [x] 02-01-PLAN.md — Create PermissionManager and AudioRecorder foundation services
+- [x] 02-02-PLAN.md — Implement hotkey detection and visual recording feedback
 
 **Notes:** Implements hotkey detection, audio capture, and permission flows. Critical for testing accessibility + sandboxing conflicts early.
 
@@ -159,7 +159,7 @@ Phase 5 (Error Handling & Polish)
 | Phase | Status | Completion |
 |-------|--------|------------|
 | 1 - Foundation & Settings | ● Complete | 5/5 requirements |
-| 2 - Core Recording & Permissions | ○ Pending | 0/7 requirements |
+| 2 - Core Recording & Permissions | ● Complete | 7/7 requirements |
 | 3 - Transcription & API | ○ Pending | 0/5 requirements |
 | 4 - Output & Paste | ○ Pending | 0/3 requirements |
 | 5 - Error Handling & Polish | ○ Pending | 0/4 requirements |
@@ -188,5 +188,5 @@ Research identified 7-phase, 14-day build order. Quick depth setting compressed 
 ---
 
 *Roadmap created: 2026-02-02*
-*Phase 2 planned: 2026-02-02*
-*Next step: `/gsd:execute-phase 2`*
+*Phase 2 completed: 2026-02-02*
+*Next step: `/gsd:plan-phase 3`*
