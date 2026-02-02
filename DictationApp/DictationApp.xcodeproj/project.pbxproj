@@ -16,6 +16,8 @@
 		E40000231234567890123456 /* LoginItemManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40000241234567890123456 /* LoginItemManager.swift */; };
 		E40000251234567890123456 /* PermissionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40000261234567890123456 /* PermissionManager.swift */; };
 		E40000271234567890123456 /* AudioRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40000281234567890123456 /* AudioRecorder.swift */; };
+		E40000291234567890123456 /* HotkeyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E400002A1234567890123456 /* HotkeyManager.swift */; };
+		E400002B1234567890123456 /* KeyboardShortcuts in Frameworks */ = {isa = PBXBuildFile; productRef = E400002C1234567890123456 /* KeyboardShortcuts */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +32,7 @@
 		E40000241234567890123456 /* LoginItemManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginItemManager.swift; sourceTree = "<group>"; };
 		E40000261234567890123456 /* PermissionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionManager.swift; sourceTree = "<group>"; };
 		E40000281234567890123456 /* AudioRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioRecorder.swift; sourceTree = "<group>"; };
+		E400002A1234567890123456 /* HotkeyManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HotkeyManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -38,6 +41,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E40000051234567890123456 /* KeychainAccess in Frameworks */,
+				E400002B1234567890123456 /* KeyboardShortcuts in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -72,6 +76,7 @@
 				E40000241234567890123456 /* LoginItemManager.swift */,
 				E40000261234567890123456 /* PermissionManager.swift */,
 				E40000281234567890123456 /* AudioRecorder.swift */,
+				E400002A1234567890123456 /* HotkeyManager.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -119,6 +124,7 @@
 			name = DictationApp;
 			packageProductDependencies = (
 				E40000041234567890123456 /* KeychainAccess */,
+				E400002C1234567890123456 /* KeyboardShortcuts */,
 			);
 			productName = DictationApp;
 			productReference = E40000061234567890123456 /* DictationApp.app */;
@@ -150,6 +156,7 @@
 			mainGroup = E400000A1234567890123456;
 			packageReferences = (
 				E40000141234567890123456 /* XCRemoteSwiftPackageReference "KeychainAccess" */,
+				E400002D1234567890123456 /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */,
 			);
 			productRefGroup = E400000C1234567890123456 /* Products */;
 			projectDirPath = "";
@@ -183,6 +190,7 @@
 				E40000231234567890123456 /* LoginItemManager.swift in Sources */,
 				E40000251234567890123456 /* PermissionManager.swift in Sources */,
 				E40000271234567890123456 /* AudioRecorder.swift in Sources */,
+				E40000291234567890123456 /* HotkeyManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -393,6 +401,14 @@
 				minimumVersion = 4.2.2;
 			};
 		};
+		E400002D1234567890123456 /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sindresorhus/KeyboardShortcuts";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -400,6 +416,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = E40000141234567890123456 /* XCRemoteSwiftPackageReference "KeychainAccess" */;
 			productName = KeychainAccess;
+		};
+		E400002C1234567890123456 /* KeyboardShortcuts */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E400002D1234567890123456 /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */;
+			productName = KeyboardShortcuts;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
