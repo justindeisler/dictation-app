@@ -97,8 +97,8 @@ Plans:
 **Plans:** 2 plans in 2 waves
 
 Plans:
-- [ ] 03-01-PLAN.md — Implement Groq Whisper API transcription and language settings
-- [ ] 03-02-PLAN.md — Integrate transcription workflow with recording completion
+- [x] 03-01-PLAN.md — Implement Groq Whisper API transcription and language settings
+- [x] 03-02-PLAN.md — Integrate transcription workflow with recording completion
 
 **Notes:** Integrates Groq Whisper API with timeout handling and retry logic. Research suggests 3+ minute timeout and chunking for longer recordings.
 
@@ -166,7 +166,7 @@ Phase 5 (Error Handling & Polish)
 |-------|--------|------------|
 | 1 - Foundation & Settings | ● Complete | 5/5 requirements |
 | 2 - Core Recording & Permissions | ● Complete | 7/7 requirements |
-| 3 - Transcription & API | ○ Pending | 0/5 requirements |
+| 3 - Transcription & API | ● Complete | 5/5 requirements |
 | 4 - Output & Paste | ○ Pending | 0/3 requirements |
 | 5 - Error Handling & Polish | ○ Pending | 0/4 requirements |
 
@@ -195,5 +195,5 @@ Research identified 7-phase, 14-day build order. Quick depth setting compressed 
 
 *Roadmap created: 2026-02-02*
 *Phase 2 completed: 2026-02-02*
-*Phase 3 planned: 2026-02-02*
-*Next step: `/gsd:execute-phase 3`*
+*Phase 3 completed: 2026-02-02*
+*Next step: `/gsd:plan-phase 4` or `/gsd:discuss-phase 4`*

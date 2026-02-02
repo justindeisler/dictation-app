@@ -9,18 +9,18 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Recording
 
-- [ ] **REC-01**: User can press Option+Space to start recording
-- [ ] **REC-02**: User can press Option+Space again to stop recording
-- [ ] **REC-03**: Menu bar icon changes to red/filled while recording
-- [ ] **REC-04**: Audio is recorded in format compatible with Groq API (M4A/WAV, 16kHz mono)
+- [x] **REC-01**: User can press Option+Space to start recording
+- [x] **REC-02**: User can press Option+Space again to stop recording
+- [x] **REC-03**: Menu bar icon changes to red/filled while recording
+- [x] **REC-04**: Audio is recorded in format compatible with Groq API (M4A/WAV, 16kHz mono)
 
 ### Transcription
 
-- [ ] **TRX-01**: Audio is sent to Groq Whisper API after recording stops
-- [ ] **TRX-02**: Transcription uses whisper-large-v3-turbo model
-- [ ] **TRX-03**: English speech is transcribed accurately
-- [ ] **TRX-04**: German speech is transcribed accurately
-- [ ] **TRX-05**: Language is auto-detected or configurable in settings
+- [x] **TRX-01**: Audio is sent to Groq Whisper API after recording stops
+- [x] **TRX-02**: Transcription uses whisper-large-v3-turbo model
+- [x] **TRX-03**: English speech is transcribed accurately
+- [x] **TRX-04**: German speech is transcribed accurately
+- [x] **TRX-05**: Language is auto-detected or configurable in settings
 
 ### Output
 
@@ -30,11 +30,11 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Settings
 
-- [ ] **SET-01**: App appears only in menu bar (no dock icon)
-- [ ] **SET-02**: User can enter Groq API key in settings window
-- [ ] **SET-03**: API key is stored securely (Keychain or encrypted)
-- [ ] **SET-04**: Settings window is accessible from menu bar menu
-- [ ] **SET-05**: App can be configured to launch at login
+- [x] **SET-01**: App appears only in menu bar (no dock icon)
+- [x] **SET-02**: User can enter Groq API key in settings window
+- [x] **SET-03**: API key is stored securely (Keychain or encrypted)
+- [x] **SET-04**: Settings window is accessible from menu bar menu
+- [x] **SET-05**: App can be configured to launch at login
 
 ### Error Handling
 
@@ -45,9 +45,9 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Permissions
 
-- [ ] **PRM-01**: App requests microphone permission on first use
-- [ ] **PRM-02**: App requests accessibility permission for keyboard simulation
-- [ ] **PRM-03**: App guides user to grant permissions if denied
+- [x] **PRM-01**: App requests microphone permission on first use
+- [x] **PRM-02**: App requests accessibility permission for keyboard simulation
+- [x] **PRM-03**: App guides user to grant permissions if denied
 
 ## v2 Requirements
 
@@ -95,23 +95,23 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| SET-01 | Phase 1 | Pending |
-| SET-02 | Phase 1 | Pending |
-| SET-03 | Phase 1 | Pending |
-| SET-04 | Phase 1 | Pending |
-| SET-05 | Phase 1 | Pending |
-| REC-01 | Phase 2 | Pending |
-| REC-02 | Phase 2 | Pending |
-| REC-03 | Phase 2 | Pending |
-| REC-04 | Phase 2 | Pending |
-| PRM-01 | Phase 2 | Pending |
-| PRM-02 | Phase 2 | Pending |
-| PRM-03 | Phase 2 | Pending |
-| TRX-01 | Phase 3 | Pending |
-| TRX-02 | Phase 3 | Pending |
-| TRX-03 | Phase 3 | Pending |
-| TRX-04 | Phase 3 | Pending |
-| TRX-05 | Phase 3 | Pending |
+| SET-01 | Phase 1 | Complete |
+| SET-02 | Phase 1 | Complete |
+| SET-03 | Phase 1 | Complete |
+| SET-04 | Phase 1 | Complete |
+| SET-05 | Phase 1 | Complete |
+| REC-01 | Phase 2 | Complete |
+| REC-02 | Phase 2 | Complete |
+| REC-03 | Phase 2 | Complete |
+| REC-04 | Phase 2 | Complete |
+| PRM-01 | Phase 2 | Complete |
+| PRM-02 | Phase 2 | Complete |
+| PRM-03 | Phase 2 | Complete |
+| TRX-01 | Phase 3 | Complete |
+| TRX-02 | Phase 3 | Complete |
+| TRX-03 | Phase 3 | Complete |
+| TRX-04 | Phase 3 | Complete |
+| TRX-05 | Phase 3 | Complete |
 | OUT-01 | Phase 4 | Pending |
 | OUT-02 | Phase 4 | Pending |
 | OUT-03 | Phase 4 | Pending |
@@ -127,4 +127,4 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 ---
 *Requirements defined: 2026-02-02*
-*Last updated: 2026-02-02 after roadmap creation*
+*Last updated: 2026-02-02 after Phase 3 completion (17/24 complete)*
