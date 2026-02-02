@@ -4,9 +4,9 @@
 
 ## Current Status
 
-- **Phase:** 2 of 5 (Core Recording & Permissions) ✅ COMPLETE
-- **Active Plan:** None - Phase 2 complete
-- **Status:** Ready for Phase 3
+- **Phase:** 3 of 5 (Transcription & API) - In Progress
+- **Active Plan:** 03-01 complete
+- **Status:** Phase 3 in progress
 
 ## Project Reference
 
@@ -20,12 +20,12 @@
 
 ## Current Position
 
-**Phase:** 2 of 5 (Core Recording & Permissions) ✅ Complete
-**Plan:** All plans complete (02-01, 02-02)
-**Progress:** ●●○○○ (2 phases complete)
+**Phase:** 3 of 5 (Transcription & API) - In Progress
+**Plan:** 03-01 complete
+**Progress:** ●●◐○○ (2 phases complete, 1 in progress)
 
 ```
-[████████████████████████────────────────] ~40%
+[██████████████████████████████──────────] ~50%
 ```
 
 ## Phase Progress
@@ -34,7 +34,7 @@
 |-------|------|--------|-------|--------------|
 | 1 | Foundation & Settings | ● Complete | 3/3 | 5 (SET-01 to SET-05) |
 | 2 | Core Recording & Permissions | ● Complete | 2/2 | 7 (REC-01 to REC-04, PRM-01 to PRM-03) |
-| 3 | Transcription & API | ○ Pending | 0/? | 5 (TRX-01 to TRX-05) |
+| 3 | Transcription & API | ◐ In Progress | 1/? | 5 (TRX-01 to TRX-05) |
 | 4 | Output & Paste | ○ Pending | 0/? | 3 (OUT-01 to OUT-03) |
 | 5 | Error Handling & Polish | ○ Pending | 0/? | 4 (ERR-01 to ERR-04) |
 
@@ -42,7 +42,7 @@
 
 ## Performance Metrics
 
-**Velocity:** 2 tasks in ~4 min (Plan 02-01)
+**Velocity:** 2 tasks in ~3 min (Plan 03-01)
 **Quality:** Build succeeds, all verification criteria met
 **Coverage:** 24/24 requirements mapped (100%)
 
@@ -64,6 +64,8 @@
 | 16kHz mono WAV format | Groq Whisper API compatibility | 2026-02-02 |
 | KeyboardShortcuts library | Sindre Sorhus's reliable global hotkey library | 2026-02-02 |
 | SF Symbol palette configuration | contentTintColor unreliable for menu bar icons | 2026-02-02 |
+| 60-second transcription timeout | Audio processing takes time; 10s too short | 2026-02-02 |
+| @AppStorage for language pref | Non-destructive settings auto-save immediately | 2026-02-02 |
 
 ### Active TODOs
 
@@ -75,8 +77,9 @@
 - [x] Execute Plan 02-01 (Permission/Audio services)
 - [x] Execute Plan 02-02 (Hotkey and Recording integration)
 - [x] Complete Phase 2
-- [ ] Plan Phase 3 (Transcription & API)
-- [ ] Execute Phase 3
+- [x] Execute Plan 03-01 (Transcription API & Language Settings)
+- [ ] Continue Phase 3 (wire transcription to recording)
+- [ ] Complete Phase 3
 
 ### Known Blockers
 
@@ -120,23 +123,30 @@ None currently.
 - NSImage.SymbolConfiguration(paletteColors:) for colored menu bar SF Symbols
 - HotkeyManager for centralized hotkey registration and handling
 
+**Patterns Established (Plan 03-01):**
+- Multipart form-data with Data extension for `append(_ string:)`
+- Separate URLSession configs for different timeout requirements
+- UUID boundary for multipart collision resistance
+- @AppStorage for instant-persist preferences without Save button
+
 ## Session Continuity
 
-**Last Session:** 2026-02-02T14:10:00Z
-**Stopped at:** Completed Phase 2 (all plans done)
+**Last Session:** 2026-02-02T17:12:00Z
+**Stopped at:** Completed Plan 03-01
 **Resume file:** None
 
-**Next Step:** Plan Phase 3 (Transcription & API)
+**Next Step:** Continue Phase 3 (wire transcription to recording completion)
 
 **Context for Next Session:**
-- Phase 2 complete: Full recording workflow operational
-- Option+Space toggles recording with red icon feedback
-- WAV files saved to temp directory ready for transcription
-- recordingDidStop notification carries file URL for Phase 3
-- All 7 Phase 2 requirements covered (REC-01 to REC-04, PRM-01 to PRM-03)
+- Plan 03-01 complete: Transcription API and language settings ready
+- APIClient.transcribe(audioURL:language:) method implemented
+- TranscriptionResult model in Sources/Models/
+- Language preference stored in UserDefaults ("transcriptionLanguage")
+- Next: Wire recordingDidStop notification to transcription call
+- Requirements covered: TRX-01, TRX-02 (partial), TRX-03 (language setting)
 
 ---
 
 *State initialized: 2026-02-02*
-*Last plan completed: 02-02 SUMMARY (2026-02-02)*
-*Phase 2 completed: 2026-02-02*
+*Last plan completed: 03-01 SUMMARY (2026-02-02)*
+*Phase 3 in progress*
