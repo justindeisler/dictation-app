@@ -5,8 +5,8 @@
 ## Current Status
 
 - **Phase:** 1 of 5 (Foundation & Settings)
-- **Active Plan:** 01-03 completed
-- **Status:** In progress
+- **Active Plan:** 01-02 SUMMARY created
+- **Status:** Phase 1 complete
 
 ## Project Reference
 
@@ -21,18 +21,18 @@
 ## Current Position
 
 **Phase:** 1 of 5 (Foundation & Settings)
-**Plan:** 01-03 completed (Launch at Login)
-**Progress:** ◐○○○○ (1/5 phases in progress)
+**Plan:** 01-02 SUMMARY created, all Phase 1 plans complete
+**Progress:** ●○○○○ (1/5 phases complete)
 
 ```
-[████████────────────────────────────────] ~15%
+[████████████────────────────────────────] ~20%
 ```
 
 ## Phase Progress
 
 | Phase | Name | Status | Plans | Requirements |
 |-------|------|--------|-------|--------------|
-| 1 | Foundation & Settings | ◐ In Progress | 3/? | 5 (SET-01 to SET-05) |
+| 1 | Foundation & Settings | ● Complete | 3/3 | 5 (SET-01 to SET-05) |
 | 2 | Core Recording & Permissions | ○ Pending | 0/? | 7 (REC-01 to REC-04, PRM-01 to PRM-03) |
 | 3 | Transcription & API | ○ Pending | 0/? | 5 (TRX-01 to TRX-05) |
 | 4 | Output & Paste | ○ Pending | 0/? | 3 (OUT-01 to OUT-03) |
@@ -65,9 +65,9 @@
 
 - [x] Review and approve roadmap
 - [x] Execute Plan 01-01 (Xcode Project Foundation)
-- [x] Execute Plan 01-02 (Settings Window) - completed externally
+- [x] Execute Plan 01-02 (Settings Window) - SUMMARY created
 - [x] Execute Plan 01-03 (Launch at Login)
-- [ ] Complete remaining Phase 1 plans (if any)
+- [x] Phase 1 complete (all 3 plans done)
 - [ ] Begin Phase 2 (Core Recording & Permissions)
 
 ### Known Blockers
@@ -87,6 +87,13 @@ None currently.
 - NSApplicationDelegateAdaptor bridges SwiftUI App to AppDelegate
 - SF Symbols with isTemplate for menu bar icons
 
+**Patterns Established (Plan 01-02):**
+- KeychainAccess library for secure credential storage
+- Async API validation before saving credentials
+- SwiftUI Form with SecureField for masked input
+- NSHostingController for presenting SwiftUI in floating window
+- Sendable/MainActor for Swift 6 concurrency safety
+
 **Patterns Established (Plan 01-03):**
 - @MainActor for Swift 6 concurrency on singleton services
 - NSMenuDelegate for dynamic menu state updates
@@ -95,20 +102,21 @@ None currently.
 
 ## Session Continuity
 
-**Last Session:** 2026-02-02T12:21:07Z
-**Stopped at:** Completed Plan 01-03 (Launch at Login)
+**Last Session:** 2026-02-02T12:26:32Z
+**Stopped at:** Created Plan 01-02 SUMMARY
 **Resume file:** None
 
-**Next Step:** Execute remaining Phase 1 plans or begin Phase 2
+**Next Step:** Begin Phase 2 (Core Recording & Permissions)
 
 **Context for Next Session:**
-- Xcode project builds successfully
-- Menu bar with Launch at Login toggle functional
-- Settings window available (from Plan 01-02)
+- Phase 1 complete: Xcode project, Settings window, Launch at Login
+- KeychainManager stores API keys in macOS Keychain
+- APIClient validates keys against Groq /models endpoint
+- SettingsView with SecureField, validation, and alert errors
 - LoginItemManager wraps SMAppService
-- All Phase 1 settings requirements covered
+- All Phase 1 settings requirements (SET-01 to SET-04) covered
 
 ---
 
 *State initialized: 2026-02-02*
-*Last plan completed: 01-03 (2026-02-02)*
+*Last plan completed: 01-02 SUMMARY (2026-02-02)*
