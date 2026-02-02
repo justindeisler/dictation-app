@@ -10,6 +10,7 @@
 		E40000011234567890123456 /* DictationAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40000001234567890123456 /* DictationAppApp.swift */; };
 		E40000031234567890123456 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40000021234567890123456 /* AppDelegate.swift */; };
 		E40000051234567890123456 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = E40000041234567890123456 /* KeychainAccess */; };
+		E40000191234567890123456 /* LoginItemManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E400001A1234567890123456 /* LoginItemManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -18,6 +19,7 @@
 		E40000061234567890123456 /* DictationApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DictationApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E40000071234567890123456 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E40000081234567890123456 /* DictationApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = DictationApp.entitlements; sourceTree = "<group>"; };
+		E400001A1234567890123456 /* LoginItemManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginItemManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -46,8 +48,17 @@
 			isa = PBXGroup;
 			children = (
 				E400000D1234567890123456 /* App */,
+				E400001B1234567890123456 /* Services */,
 			);
 			path = Sources;
+			sourceTree = "<group>";
+		};
+		E400001B1234567890123456 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				E400001A1234567890123456 /* LoginItemManager.swift */,
+			);
+			path = Services;
 			sourceTree = "<group>";
 		};
 		E400000C1234567890123456 /* Products */ = {
@@ -143,6 +154,7 @@
 			files = (
 				E40000011234567890123456 /* DictationAppApp.swift in Sources */,
 				E40000031234567890123456 /* AppDelegate.swift in Sources */,
+				E40000191234567890123456 /* LoginItemManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
