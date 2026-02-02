@@ -163,7 +163,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
             let window = NSWindow(contentViewController: hostingController)
             window.title = "DictationApp Settings"
             window.styleMask = [.titled, .closable]  // No resize - fixed layout
-            window.setContentSize(NSSize(width: 500, height: 250))
+            window.setContentSize(NSSize(width: 500, height: 320))
             window.center()
 
             // User decision: separate floating window

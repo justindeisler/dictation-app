@@ -7,6 +7,8 @@ struct SettingsView: View {
     @State private var showValidationError = false
     @State private var validationError: String = ""
 
+    @AppStorage("transcriptionLanguage") private var languagePreference: String = "auto"
+
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
@@ -24,6 +26,22 @@ struct SettingsView: View {
                         .foregroundStyle(.secondary)
                 } header: {
                     Text("API Configuration")
+                        .font(.headline)
+                }
+
+                Section {
+                    Picker("Language", selection: $languagePreference) {
+                        Text("Auto-detect").tag("auto")
+                        Text("English").tag("en")
+                        Text("German").tag("de")
+                    }
+                    .pickerStyle(.segmented)
+
+                    Text("Specifying a language improves accuracy and speed")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                } header: {
+                    Text("Transcription")
                         .font(.headline)
                 }
             }
@@ -63,7 +81,7 @@ struct SettingsView: View {
             .padding()
             .background(Color(nsColor: .windowBackgroundColor))
         }
-        .frame(width: 500, height: 250)
+        .frame(width: 500, height: 320)
         .onAppear {
             loadCurrentSettings()
         }
