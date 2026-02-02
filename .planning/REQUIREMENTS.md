@@ -95,36 +95,36 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| REC-01 | TBD | Pending |
-| REC-02 | TBD | Pending |
-| REC-03 | TBD | Pending |
-| REC-04 | TBD | Pending |
-| TRX-01 | TBD | Pending |
-| TRX-02 | TBD | Pending |
-| TRX-03 | TBD | Pending |
-| TRX-04 | TBD | Pending |
-| TRX-05 | TBD | Pending |
-| OUT-01 | TBD | Pending |
-| OUT-02 | TBD | Pending |
-| OUT-03 | TBD | Pending |
-| SET-01 | TBD | Pending |
-| SET-02 | TBD | Pending |
-| SET-03 | TBD | Pending |
-| SET-04 | TBD | Pending |
-| SET-05 | TBD | Pending |
-| ERR-01 | TBD | Pending |
-| ERR-02 | TBD | Pending |
-| ERR-03 | TBD | Pending |
-| ERR-04 | TBD | Pending |
-| PRM-01 | TBD | Pending |
-| PRM-02 | TBD | Pending |
-| PRM-03 | TBD | Pending |
+| SET-01 | Phase 1 | Pending |
+| SET-02 | Phase 1 | Pending |
+| SET-03 | Phase 1 | Pending |
+| SET-04 | Phase 1 | Pending |
+| SET-05 | Phase 1 | Pending |
+| REC-01 | Phase 2 | Pending |
+| REC-02 | Phase 2 | Pending |
+| REC-03 | Phase 2 | Pending |
+| REC-04 | Phase 2 | Pending |
+| PRM-01 | Phase 2 | Pending |
+| PRM-02 | Phase 2 | Pending |
+| PRM-03 | Phase 2 | Pending |
+| TRX-01 | Phase 3 | Pending |
+| TRX-02 | Phase 3 | Pending |
+| TRX-03 | Phase 3 | Pending |
+| TRX-04 | Phase 3 | Pending |
+| TRX-05 | Phase 3 | Pending |
+| OUT-01 | Phase 4 | Pending |
+| OUT-02 | Phase 4 | Pending |
+| OUT-03 | Phase 4 | Pending |
+| ERR-01 | Phase 5 | Pending |
+| ERR-02 | Phase 5 | Pending |
+| ERR-03 | Phase 5 | Pending |
+| ERR-04 | Phase 5 | Pending |
 
 **Coverage:**
 - v1 requirements: 24 total
-- Mapped to phases: 0 (pending roadmap)
-- Unmapped: 24
+- Mapped to phases: 24 (100%)
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-02-02*
-*Last updated: 2026-02-02 after initial definition*
+*Last updated: 2026-02-02 after roadmap creation*
