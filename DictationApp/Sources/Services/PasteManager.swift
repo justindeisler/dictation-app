@@ -26,31 +26,25 @@ final class PasteManager {
             return
         }
 
-        // 2. Check for focused text field (user decision: check before attempting paste)
-        guard checkFocusedTextFieldExists() else {
-            print("No text field focused - showing notification fallback")
-            await showNotificationFallback(text: trimmedText)
-            return
-        }
-
-        // 3. Apply smart spacing (user decision: add space if cursor isn't at start or after whitespace)
+        // 2. Apply smart spacing if we can detect cursor context
         let finalText = applySmartSpacing(to: trimmedText)
 
-        // 4. Write to clipboard (user decision: overwrite, don't preserve previous)
+        // 3. Write to clipboard FIRST - this always works as fallback
         writeToClipboard(text: finalText)
+        print("Text copied to clipboard: \(finalText.prefix(50))...")
 
-        // 5. Wait safe delay (user decision: 100-200ms range, using 150ms)
+        // 4. Wait safe delay (user decision: 100-200ms range, using 150ms)
         try? await Task.sleep(nanoseconds: 150_000_000)
 
-        // 6. Simulate Cmd+V paste
+        // 5. Simulate Cmd+V paste - this will work in any app that accepts paste
         let pasteSuccess = simulatePaste()
 
-        // 7. Fallback to notification if paste failed (user decision)
-        if !pasteSuccess {
-            print("Paste simulation failed - showing notification fallback")
-            await showNotificationFallback(text: trimmedText)
-        } else {
+        if pasteSuccess {
             print("Text pasted successfully: \(trimmedText.prefix(50))...")
+        } else {
+            // Paste simulation failed but text is on clipboard
+            print("Paste simulation failed - text is on clipboard, use Cmd+V to paste manually")
+            await showNotificationFallback(text: trimmedText)
         }
     }
 
@@ -212,6 +206,19 @@ final class PasteManager {
     /// Show notification with transcription text and copy action
     /// - Parameter text: Transcription text to display
     func showNotificationFallback(text: String) async {
+        let center = UNUserNotificationCenter.current()
+
+        // Check authorization status first
+        let settings = await center.notificationSettings()
+        guard settings.authorizationStatus == .authorized else {
+            print("Notification permission not granted (status: \(settings.authorizationStatus.rawValue))")
+            print("Text is on clipboard - use Cmd+V to paste manually")
+
+            // Show alert as fallback since notifications aren't available
+            await showAlertFallback(text: text)
+            return
+        }
+
         let content = UNMutableNotificationContent()
         content.title = "Transcription Ready"
         content.body = text
@@ -225,10 +232,21 @@ final class PasteManager {
         )
 
         do {
-            try await UNUserNotificationCenter.current().add(request)
+            try await center.add(request)
             print("Notification shown with transcription")
         } catch {
             print("Failed to show notification: \(error)")
+            await showAlertFallback(text: text)
         }
+    }
+
+    /// Show an alert dialog as fallback when notifications aren't available
+    private func showAlertFallback(text: String) async {
+        let alert = NSAlert()
+        alert.messageText = "Transcription Ready"
+        alert.informativeText = "Text copied to clipboard:\n\n\"\(text)\"\n\nUse Cmd+V to paste."
+        alert.alertStyle = .informational
+        alert.addButton(withTitle: "OK")
+        alert.runModal()
     }
 }
