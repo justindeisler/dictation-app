@@ -1,6 +1,37 @@
 import AppKit
 import SwiftUI
 
+// MARK: - Menu Bar Icon State
+
+/// Visual states for the menu bar icon
+enum MenuBarIconState {
+    case idle
+    case recording
+
+    var symbolName: String {
+        switch self {
+        case .idle: return "waveform"
+        case .recording: return "waveform.circle.fill"
+        }
+    }
+
+    var tintColor: NSColor? {
+        switch self {
+        case .idle: return nil  // Uses template mode (adapts to light/dark)
+        case .recording: return .systemRed
+        }
+    }
+
+    var isTemplate: Bool {
+        switch self {
+        case .idle: return true
+        case .recording: return false  // Explicit color, not template
+        }
+    }
+}
+
+// MARK: - App Delegate
+
 @MainActor
 class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     var statusItem: NSStatusItem?
@@ -8,6 +39,55 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         setupMenuBar()
+        setupRecordingStateObservers()
+        HotkeyManager.shared.setupHotkey()
+
+        // Check and request accessibility permission at launch (PRM-02)
+        // Required for Phase 4 paste functionality
+        if !PermissionManager.shared.checkAccessibilityPermission() {
+            PermissionManager.shared.requestAccessibilityPermission()
+        }
+    }
+
+    // MARK: - Recording State Observers
+
+    private func setupRecordingStateObservers() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleRecordingStarted),
+            name: .recordingDidStart,
+            object: nil
+        )
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleRecordingStopped),
+            name: .recordingDidStop,
+            object: nil
+        )
+    }
+
+    @objc func handleRecordingStarted() {
+        updateMenuBarIcon(state: .recording)
+    }
+
+    @objc func handleRecordingStopped(_ notification: Notification) {
+        updateMenuBarIcon(state: .idle)
+        // notification.object contains the recording URL for Phase 3 transcription
+    }
+
+    // MARK: - Menu Bar Icon
+
+    func updateMenuBarIcon(state: MenuBarIconState) {
+        guard let button = statusItem?.button else { return }
+
+        let image = NSImage(
+            systemSymbolName: state.symbolName,
+            accessibilityDescription: state == .recording ? "Recording" : "Dictation"
+        )
+        image?.isTemplate = state.isTemplate
+
+        button.image = image
+        button.contentTintColor = state.tintColor
     }
 
     private func setupMenuBar() {
