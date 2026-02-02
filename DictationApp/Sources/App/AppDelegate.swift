@@ -1,5 +1,6 @@
 import AppKit
 import SwiftUI
+import UserNotifications
 
 // MARK: - Menu Bar Icon State
 
@@ -33,13 +34,15 @@ enum MenuBarIconState {
 // MARK: - App Delegate
 
 @MainActor
-class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
+class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, UNUserNotificationCenterDelegate {
     var statusItem: NSStatusItem?
     var settingsWindowController: NSWindowController?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         setupMenuBar()
         setupRecordingStateObservers()
+        setupNotifications()              // NEW: Notification infrastructure
+        setupTranscriptionObservers()     // NEW: Wire transcription to paste
         HotkeyManager.shared.setupHotkey()
 
         // Check and request accessibility permission at launch (PRM-02)
@@ -73,6 +76,61 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     @objc func handleRecordingStopped(_ notification: Notification) {
         updateMenuBarIcon(state: .idle)
         // notification.object contains the recording URL for Phase 3 transcription
+    }
+
+    // MARK: - Notification Setup
+
+    private func setupNotifications() {
+        let center = UNUserNotificationCenter.current()
+        center.delegate = self
+
+        // Define "Copy to Clipboard" action for transcription notifications
+        let copyAction = UNNotificationAction(
+            identifier: "COPY_ACTION",
+            title: "Copy to Clipboard",
+            options: .foreground
+        )
+
+        let category = UNNotificationCategory(
+            identifier: "TRANSCRIPTION_READY",
+            actions: [copyAction],
+            intentIdentifiers: [],
+            options: []
+        )
+
+        center.setNotificationCategories([category])
+
+        // Request notification authorization
+        center.requestAuthorization(options: [.alert, .sound]) { granted, error in
+            if let error = error {
+                print("Notification authorization error: \(error)")
+            } else if granted {
+                print("Notification permission granted")
+            }
+        }
+    }
+
+    // MARK: - Transcription Observers
+
+    private func setupTranscriptionObservers() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleTranscriptionComplete),
+            name: .transcriptionDidComplete,
+            object: nil
+        )
+    }
+
+    @objc func handleTranscriptionComplete(_ notification: Notification) {
+        guard let text = notification.object as? String else {
+            print("Transcription notification missing text")
+            return
+        }
+
+        // Trigger automatic paste (OUT-03)
+        Task {
+            await PasteManager.shared.pasteText(text)
+        }
     }
 
     // MARK: - Menu Bar Icon
@@ -220,5 +278,33 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
 
     @objc func quit() {
         NSApp.terminate(nil)
+    }
+
+    // MARK: - UNUserNotificationCenterDelegate
+
+    nonisolated func userNotificationCenter(
+        _ center: UNUserNotificationCenter,
+        didReceive response: UNNotificationResponse,
+        withCompletionHandler completionHandler: @escaping () -> Void
+    ) {
+        // Handle "Copy to Clipboard" action
+        if response.actionIdentifier == "COPY_ACTION" {
+            let text = response.notification.request.content.body
+            let pasteboard = NSPasteboard.general
+            pasteboard.clearContents()
+            pasteboard.setString(text, forType: .string)
+            print("Transcription copied to clipboard from notification action")
+        }
+
+        completionHandler()
+    }
+
+    nonisolated func userNotificationCenter(
+        _ center: UNUserNotificationCenter,
+        willPresent notification: UNNotification,
+        withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void
+    ) {
+        // Show notification even when app is in foreground
+        completionHandler([.banner, .sound])
     }
 }
