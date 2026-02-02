@@ -80,14 +80,22 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     func updateMenuBarIcon(state: MenuBarIconState) {
         guard let button = statusItem?.button else { return }
 
-        let image = NSImage(
-            systemSymbolName: state.symbolName,
-            accessibilityDescription: state == .recording ? "Recording" : "Dictation"
-        )
-        image?.isTemplate = state.isTemplate
+        let accessibilityDesc = state == .recording ? "Recording" : "Dictation"
 
-        button.image = image
-        button.contentTintColor = state.tintColor
+        if state == .recording {
+            // Use symbol configuration with red color for recording state
+            let config = NSImage.SymbolConfiguration(paletteColors: [.systemRed])
+            if let image = NSImage(systemSymbolName: state.symbolName, accessibilityDescription: accessibilityDesc)?
+                .withSymbolConfiguration(config) {
+                image.isTemplate = false  // Don't adapt to menu bar appearance
+                button.image = image
+            }
+        } else {
+            // Use template mode for idle state (adapts to light/dark)
+            let image = NSImage(systemSymbolName: state.symbolName, accessibilityDescription: accessibilityDesc)
+            image?.isTemplate = true
+            button.image = image
+        }
     }
 
     private func setupMenuBar() {
