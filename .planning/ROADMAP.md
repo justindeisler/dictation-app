@@ -36,6 +36,13 @@
 
 **Dependencies:** None (foundation phase)
 
+**Plans:** 3 plans in 2 waves
+
+Plans:
+- [ ] 01-01-PLAN.md — Create Xcode project with menu bar presence (no dock icon)
+- [ ] 01-02-PLAN.md — Implement settings window with API key storage and validation
+- [ ] 01-03-PLAN.md — Implement launch at login with SMAppService
+
 **Notes:** Establishes basic app infrastructure and settings management. Research suggests early testing of sandboxing decisions here.
 
 ---
