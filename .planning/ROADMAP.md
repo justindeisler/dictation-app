@@ -39,9 +39,9 @@
 **Plans:** 3 plans in 2 waves
 
 Plans:
-- [ ] 01-01-PLAN.md — Create Xcode project with menu bar presence (no dock icon)
-- [ ] 01-02-PLAN.md — Implement settings window with API key storage and validation
-- [ ] 01-03-PLAN.md — Implement launch at login with SMAppService
+- [x] 01-01-PLAN.md — Create Xcode project with menu bar presence (no dock icon)
+- [x] 01-02-PLAN.md — Implement settings window with API key storage and validation
+- [x] 01-03-PLAN.md — Implement launch at login with SMAppService
 
 **Notes:** Establishes basic app infrastructure and settings management. Research suggests early testing of sandboxing decisions here.
 
@@ -152,7 +152,7 @@ Phase 5 (Error Handling & Polish)
 
 | Phase | Status | Completion |
 |-------|--------|------------|
-| 1 - Foundation & Settings | ○ Pending | 0/5 requirements |
+| 1 - Foundation & Settings | ● Complete | 5/5 requirements |
 | 2 - Core Recording & Permissions | ○ Pending | 0/7 requirements |
 | 3 - Transcription & API | ○ Pending | 0/5 requirements |
 | 4 - Output & Paste | ○ Pending | 0/3 requirements |
