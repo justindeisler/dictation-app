@@ -68,8 +68,25 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     }
 
     @objc func openSettings() {
-        // Placeholder - implemented in Plan 02
-        print("Settings clicked")
+        if settingsWindowController == nil {
+            let settingsView = SettingsView()
+            let hostingController = NSHostingController(rootView: settingsView)
+
+            let window = NSWindow(contentViewController: hostingController)
+            window.title = "DictationApp Settings"
+            window.styleMask = [.titled, .closable]  // No resize - fixed layout
+            window.setContentSize(NSSize(width: 500, height: 250))
+            window.center()
+
+            // User decision: separate floating window
+            window.level = .floating
+            window.isMovableByWindowBackground = true
+
+            settingsWindowController = NSWindowController(window: window)
+        }
+
+        settingsWindowController?.showWindow(nil)
+        NSApp.activate(ignoringOtherApps: true)
     }
 
     @objc func showAbout() {

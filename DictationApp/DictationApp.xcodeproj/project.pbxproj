@@ -10,7 +10,10 @@
 		E40000011234567890123456 /* DictationAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40000001234567890123456 /* DictationAppApp.swift */; };
 		E40000031234567890123456 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40000021234567890123456 /* AppDelegate.swift */; };
 		E40000051234567890123456 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = E40000041234567890123456 /* KeychainAccess */; };
-		E40000191234567890123456 /* LoginItemManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E400001A1234567890123456 /* LoginItemManager.swift */; };
+		E400001C1234567890123456 /* KeychainManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E400001D1234567890123456 /* KeychainManager.swift */; };
+		E400001E1234567890123456 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E400001F1234567890123456 /* APIClient.swift */; };
+		E40000201234567890123456 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40000211234567890123456 /* SettingsView.swift */; };
+		E40000231234567890123456 /* LoginItemManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40000241234567890123456 /* LoginItemManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -19,7 +22,10 @@
 		E40000061234567890123456 /* DictationApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DictationApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E40000071234567890123456 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E40000081234567890123456 /* DictationApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = DictationApp.entitlements; sourceTree = "<group>"; };
-		E400001A1234567890123456 /* LoginItemManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginItemManager.swift; sourceTree = "<group>"; };
+		E400001D1234567890123456 /* KeychainManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainManager.swift; sourceTree = "<group>"; };
+		E400001F1234567890123456 /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
+		E40000211234567890123456 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		E40000241234567890123456 /* LoginItemManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginItemManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -49,6 +55,7 @@
 			children = (
 				E400000D1234567890123456 /* App */,
 				E400001B1234567890123456 /* Services */,
+				E40000221234567890123456 /* Views */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -56,9 +63,19 @@
 		E400001B1234567890123456 /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				E400001A1234567890123456 /* LoginItemManager.swift */,
+				E400001D1234567890123456 /* KeychainManager.swift */,
+				E400001F1234567890123456 /* APIClient.swift */,
+				E40000241234567890123456 /* LoginItemManager.swift */,
 			);
 			path = Services;
+			sourceTree = "<group>";
+		};
+		E40000221234567890123456 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				E40000211234567890123456 /* SettingsView.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 		E400000C1234567890123456 /* Products */ = {
@@ -154,7 +171,10 @@
 			files = (
 				E40000011234567890123456 /* DictationAppApp.swift in Sources */,
 				E40000031234567890123456 /* AppDelegate.swift in Sources */,
-				E40000191234567890123456 /* LoginItemManager.swift in Sources */,
+				E400001C1234567890123456 /* KeychainManager.swift in Sources */,
+				E400001E1234567890123456 /* APIClient.swift in Sources */,
+				E40000201234567890123456 /* SettingsView.swift in Sources */,
+				E40000231234567890123456 /* LoginItemManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
