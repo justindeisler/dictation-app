@@ -4,9 +4,9 @@
 
 ## Current Status
 
-- **Phase:** Not started
-- **Active Plan:** None
-- **Status:** Roadmap created, ready for planning
+- **Phase:** 1 of 5 (Foundation & Settings)
+- **Active Plan:** 01-01 completed
+- **Status:** In progress
 
 ## Project Reference
 
@@ -14,36 +14,36 @@
 
 **Primary Use Case:** Dictating descriptions of what to build while working with Claude Code. Natural language, not code syntax.
 
-**Technical Stack:** Swift 6.1+, SwiftUI + AppKit, AVFoundation, Groq Whisper API
+**Technical Stack:** Swift 6.0, SwiftUI + AppKit, AVFoundation, Groq Whisper API
 
 **See:** `.planning/PROJECT.md` for full project context
 
 ## Current Position
 
-**Phase:** 0 (Pre-planning)
-**Plan:** None
-**Progress:** ○○○○○ (0/5 phases)
+**Phase:** 1 of 5 (Foundation & Settings)
+**Plan:** 01-01 completed (Xcode Project Foundation)
+**Progress:** ◐○○○○ (1/5 phases in progress)
 
 ```
-[────────────────────────────────────────] 0%
+[████────────────────────────────────────] ~5%
 ```
 
 ## Phase Progress
 
 | Phase | Name | Status | Plans | Requirements |
 |-------|------|--------|-------|--------------|
-| 1 | Foundation & Settings | ○ Pending | 0/0 | 5 (SET-01 to SET-05) |
-| 2 | Core Recording & Permissions | ○ Pending | 0/0 | 7 (REC-01 to REC-04, PRM-01 to PRM-03) |
-| 3 | Transcription & API | ○ Pending | 0/0 | 5 (TRX-01 to TRX-05) |
-| 4 | Output & Paste | ○ Pending | 0/0 | 3 (OUT-01 to OUT-03) |
-| 5 | Error Handling & Polish | ○ Pending | 0/0 | 4 (ERR-01 to ERR-04) |
+| 1 | Foundation & Settings | ◐ In Progress | 1/? | 5 (SET-01 to SET-05) |
+| 2 | Core Recording & Permissions | ○ Pending | 0/? | 7 (REC-01 to REC-04, PRM-01 to PRM-03) |
+| 3 | Transcription & API | ○ Pending | 0/? | 5 (TRX-01 to TRX-05) |
+| 4 | Output & Paste | ○ Pending | 0/? | 3 (OUT-01 to OUT-03) |
+| 5 | Error Handling & Polish | ○ Pending | 0/? | 4 (ERR-01 to ERR-04) |
 
 **Legend:** ○ Pending | ◐ In Progress | ● Completed
 
 ## Performance Metrics
 
-**Velocity:** N/A (no plans executed yet)
-**Quality:** N/A (no validation data yet)
+**Velocity:** 2 tasks in 3 min (Plan 01-01)
+**Quality:** Build succeeds, all verification criteria met
 **Coverage:** 24/24 requirements mapped (100%)
 
 ## Accumulated Context
@@ -54,37 +54,49 @@
 |----------|-----------|------|
 | 5-phase roadmap (quick depth) | Compress research's 7 phases to critical path | 2026-02-02 |
 | Linear dependency chain | Each phase builds on previous foundation | 2026-02-02 |
+| Non-sandboxed distribution | Required for CGEvent.post() paste in Phase 4 | 2026-02-02 |
+| NSStatusItem over MenuBarExtra | Better macOS 14.0 compatibility and icon control | 2026-02-02 |
+| waveform SF Symbol | Clean, audio-related, template-mode for light/dark | 2026-02-02 |
 
 ### Active TODOs
 
-- [ ] Review and approve roadmap
-- [ ] Run `/gsd:plan-phase 1` to create first phase plan
+- [x] Review and approve roadmap
+- [x] Execute Plan 01-01 (Xcode Project Foundation)
+- [ ] Execute Plan 01-02 (Settings Window)
+- [ ] Execute Plan 01-03 (Launch at Login)
 
 ### Known Blockers
 
-None currently. Roadmap complete and ready for planning.
+None currently.
 
 ### Technical Notes
 
 **Research Highlights:**
-- Sandboxing decision (App Store vs Developer ID) must be made in Phase 1
+- Sandboxing decision made: Non-sandboxed for Developer ID distribution
 - Microphone permission silent failures on Sonoma 14.2+ need careful testing
 - API timeout handling critical (3+ minute timeout, chunking for long recordings)
-- CGEvent paste requires accessibility permissions (conflicts with sandboxing)
+- CGEvent paste requires accessibility permissions (enabled by non-sandbox choice)
+
+**Patterns Established (Plan 01-01):**
+- AppKit AppDelegate manages menu bar, SwiftUI for windows
+- NSApplicationDelegateAdaptor bridges SwiftUI App to AppDelegate
+- SF Symbols with isTemplate for menu bar icons
 
 ## Session Continuity
 
-**Last Action:** Roadmap created with 5 phases, 24 requirements mapped (100% coverage)
+**Last Session:** 2026-02-02T12:17:51Z
+**Stopped at:** Completed Plan 01-01 (Xcode Project Foundation)
+**Resume file:** None
 
-**Next Step:** Review roadmap, then run `/gsd:plan-phase 1` to begin Foundation & Settings planning
+**Next Step:** Execute Plan 01-02 (Settings Window) or create if not yet planned
 
 **Context for Next Session:**
-- All v1 requirements mapped to phases
-- Research identified 21 critical pitfalls to address
-- Recommended stack: Swift 6.1+, SwiftUI+AppKit, AVFoundation, Groq Whisper
-- Quick depth = 3-5 phases (achieved: 5 phases)
+- Xcode project builds successfully
+- Menu bar icon visible, dropdown menu complete
+- KeychainAccess dependency ready for API key storage
+- AppDelegate.openSettings() ready for implementation
 
 ---
 
 *State initialized: 2026-02-02*
-*Ready for: Phase 1 planning*
+*Last plan completed: 01-01 (2026-02-02)*
