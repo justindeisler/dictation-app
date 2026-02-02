@@ -67,6 +67,12 @@ Plans:
 
 **Dependencies:** Phase 1 (needs menu bar infrastructure and settings)
 
+**Plans:** 2 plans in 2 waves
+
+Plans:
+- [ ] 02-01-PLAN.md — Create PermissionManager and AudioRecorder foundation services
+- [ ] 02-02-PLAN.md — Implement hotkey detection and visual recording feedback
+
 **Notes:** Implements hotkey detection, audio capture, and permission flows. Critical for testing accessibility + sandboxing conflicts early.
 
 ---
@@ -182,4 +188,5 @@ Research identified 7-phase, 14-day build order. Quick depth setting compressed 
 ---
 
 *Roadmap created: 2026-02-02*
-*Next step: `/gsd:plan-phase 1`*
+*Phase 2 planned: 2026-02-02*
+*Next step: `/gsd:execute-phase 2`*
