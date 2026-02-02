@@ -4,9 +4,9 @@
 
 ## Current Status
 
-- **Phase:** 1 of 5 (Foundation & Settings)
-- **Active Plan:** 01-02 SUMMARY created
-- **Status:** Phase 1 complete
+- **Phase:** 2 of 5 (Core Recording & Permissions)
+- **Active Plan:** 02-01 SUMMARY created
+- **Status:** Phase 2 in progress
 
 ## Project Reference
 
@@ -20,12 +20,12 @@
 
 ## Current Position
 
-**Phase:** 1 of 5 (Foundation & Settings)
-**Plan:** 01-02 SUMMARY created, all Phase 1 plans complete
-**Progress:** ●○○○○ (1/5 phases complete)
+**Phase:** 2 of 5 (Core Recording & Permissions)
+**Plan:** 02-01 complete (Permission/Audio services), continuing to 02-02
+**Progress:** ●◐○○○ (1 phase complete, 1 in progress)
 
 ```
-[████████████────────────────────────────] ~20%
+[████████████████────────────────────────] ~28%
 ```
 
 ## Phase Progress
@@ -33,7 +33,7 @@
 | Phase | Name | Status | Plans | Requirements |
 |-------|------|--------|-------|--------------|
 | 1 | Foundation & Settings | ● Complete | 3/3 | 5 (SET-01 to SET-05) |
-| 2 | Core Recording & Permissions | ○ Pending | 0/? | 7 (REC-01 to REC-04, PRM-01 to PRM-03) |
+| 2 | Core Recording & Permissions | ◐ In Progress | 1/? | 7 (REC-01 to REC-04, PRM-01 to PRM-03) |
 | 3 | Transcription & API | ○ Pending | 0/? | 5 (TRX-01 to TRX-05) |
 | 4 | Output & Paste | ○ Pending | 0/? | 3 (OUT-01 to OUT-03) |
 | 5 | Error Handling & Polish | ○ Pending | 0/? | 4 (ERR-01 to ERR-04) |
@@ -42,7 +42,7 @@
 
 ## Performance Metrics
 
-**Velocity:** 2 tasks in ~5 min (Plan 01-03)
+**Velocity:** 2 tasks in ~4 min (Plan 02-01)
 **Quality:** Build succeeds, all verification criteria met
 **Coverage:** 24/24 requirements mapped (100%)
 
@@ -60,15 +60,19 @@
 | SMAppService for login items | Modern macOS 13+ API, no helper app needed | 2026-02-02 |
 | Toggle reflects actual state | User decision - show truth, not cached preference | 2026-02-02 |
 | Guidance alert when blocked | Help users enable manually via System Settings | 2026-02-02 |
+| String literal for AXTrustedCheckOptionPrompt | Avoid Swift 6 concurrency warning with C global | 2026-02-02 |
+| 16kHz mono WAV format | Groq Whisper API compatibility | 2026-02-02 |
 
 ### Active TODOs
 
 - [x] Review and approve roadmap
 - [x] Execute Plan 01-01 (Xcode Project Foundation)
-- [x] Execute Plan 01-02 (Settings Window) - SUMMARY created
+- [x] Execute Plan 01-02 (Settings Window)
 - [x] Execute Plan 01-03 (Launch at Login)
 - [x] Phase 1 complete (all 3 plans done)
-- [ ] Begin Phase 2 (Core Recording & Permissions)
+- [x] Execute Plan 02-01 (Permission/Audio services)
+- [ ] Execute Plan 02-02 (Hotkey and Recording integration)
+- [ ] Complete Phase 2
 
 ### Known Blockers
 
@@ -100,23 +104,28 @@ None currently.
 - System Settings deep links (x-apple.systempreferences:)
 - SMAppService.mainApp for launch at login
 
+**Patterns Established (Plan 02-01):**
+- nonisolated func for C API calls with concurrency-unsafe globals
+- AudioRecorderError with LocalizedError for user-facing error messages
+- PermissionManager for microphone/accessibility permission lifecycle
+- AudioRecorder for 16kHz mono WAV recording to temp files
+
 ## Session Continuity
 
-**Last Session:** 2026-02-02T12:26:32Z
-**Stopped at:** Created Plan 01-02 SUMMARY
+**Last Session:** 2026-02-02T13:56:00Z
+**Stopped at:** Completed Plan 02-01 SUMMARY
 **Resume file:** None
 
-**Next Step:** Begin Phase 2 (Core Recording & Permissions)
+**Next Step:** Execute Plan 02-02 (Hotkey and Recording integration)
 
 **Context for Next Session:**
-- Phase 1 complete: Xcode project, Settings window, Launch at Login
-- KeychainManager stores API keys in macOS Keychain
-- APIClient validates keys against Groq /models endpoint
-- SettingsView with SecureField, validation, and alert errors
-- LoginItemManager wraps SMAppService
-- All Phase 1 settings requirements (SET-01 to SET-04) covered
+- Phase 2 Plan 1 complete: PermissionManager and AudioRecorder services
+- PermissionManager handles microphone + accessibility permissions with guidance alerts
+- AudioRecorder creates 16kHz mono WAV files for Groq API
+- Both follow @MainActor singleton pattern
+- Requirements partially covered: PRM-01, PRM-02, PRM-03, REC-04
 
 ---
 
 *State initialized: 2026-02-02*
-*Last plan completed: 01-02 SUMMARY (2026-02-02)*
+*Last plan completed: 02-01 SUMMARY (2026-02-02)*
