@@ -51,6 +51,11 @@ final class HotkeyManager {
                     name: .recordingDidStop,
                     object: recordingURL
                 )
+
+                // Trigger transcription (TRX-01)
+                Task {
+                    await TranscriptionManager.shared.handleRecordingCompletion(audioURL: recordingURL)
+                }
             }
         } else {
             // Check microphone permission before recording (PRM-01)
