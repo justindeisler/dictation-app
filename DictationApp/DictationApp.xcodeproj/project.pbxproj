@@ -20,6 +20,7 @@
 		E400002B1234567890123456 /* KeyboardShortcuts in Frameworks */ = {isa = PBXBuildFile; productRef = E400002C1234567890123456 /* KeyboardShortcuts */; };
 		E400002E1234567890123456 /* TranscriptionResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = E400002F1234567890123456 /* TranscriptionResult.swift */; };
 		E40000311234567890123456 /* TranscriptionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40000321234567890123456 /* TranscriptionManager.swift */; };
+		E46EC0343501722850571617 /* PasteManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C2E9A89385016420761957 /* PasteManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,6 +38,7 @@
 		E400002A1234567890123456 /* HotkeyManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HotkeyManager.swift; sourceTree = "<group>"; };
 		E400002F1234567890123456 /* TranscriptionResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranscriptionResult.swift; sourceTree = "<group>"; };
 		E40000321234567890123456 /* TranscriptionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranscriptionManager.swift; sourceTree = "<group>"; };
+		E4C2E9A89385016420761957 /* PasteManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasteManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -91,6 +93,7 @@
 				E40000281234567890123456 /* AudioRecorder.swift */,
 				E400002A1234567890123456 /* HotkeyManager.swift */,
 				E40000321234567890123456 /* TranscriptionManager.swift */,
+				E4C2E9A89385016420761957 /* PasteManager.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -207,6 +210,7 @@
 				E40000291234567890123456 /* HotkeyManager.swift in Sources */,
 				E400002E1234567890123456 /* TranscriptionResult.swift in Sources */,
 				E40000311234567890123456 /* TranscriptionManager.swift in Sources */,
+				E46EC0343501722850571617 /* PasteManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
