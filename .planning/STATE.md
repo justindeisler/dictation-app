@@ -4,9 +4,9 @@
 
 ## Current Status
 
-- **Phase:** 3 of 5 (Transcription & API) - Complete
-- **Active Plan:** 03-02 complete
-- **Status:** Ready for Phase 4
+- **Phase:** 4 of 5 (Output & Paste) - In Progress
+- **Active Plan:** 04-02 ready for execution
+- **Status:** 1/2 plans complete
 
 ## Project Reference
 
@@ -20,12 +20,12 @@
 
 ## Current Position
 
-**Phase:** 3 of 5 (Transcription & API) - Complete
-**Plan:** 03-02 complete (Phase 3 finished)
-**Progress:** ●●●○○ (3 phases complete)
+**Phase:** 4 of 5 (Output & Paste) - In Progress
+**Plan:** 04-01 complete, 04-02 ready (1/2 plans done)
+**Progress:** ●●●◐○ (3 phases complete, Phase 4 in progress)
 
 ```
-[████████████████████████████████████────] ~60%
+[████████████████████████████████████████] ~65%
 ```
 
 ## Phase Progress
@@ -35,16 +35,16 @@
 | 1 | Foundation & Settings | ● Complete | 3/3 | 5 (SET-01 to SET-05) |
 | 2 | Core Recording & Permissions | ● Complete | 2/2 | 7 (REC-01 to REC-04, PRM-01 to PRM-03) |
 | 3 | Transcription & API | ● Complete | 2/2 | 5 (TRX-01 to TRX-05) |
-| 4 | Output & Paste | ○ Pending | 0/? | 3 (OUT-01 to OUT-03) |
+| 4 | Output & Paste | ◐ In Progress | 1/2 | 3 (OUT-01 to OUT-03) |
 | 5 | Error Handling & Polish | ○ Pending | 0/? | 4 (ERR-01 to ERR-04) |
 
 **Legend:** ○ Pending | ◐ In Progress | ● Completed
 
 ## Performance Metrics
 
-**Velocity:** 2 tasks in ~3 min (Plan 03-01)
+**Velocity:** 1 task in 3m 35s (Plan 04-01)
 **Quality:** Build succeeds, all verification criteria met
-**Coverage:** 24/24 requirements mapped (100%)
+**Coverage:** 25/27 requirements mapped (93%)
 
 ## Accumulated Context
 
@@ -68,6 +68,9 @@
 | @AppStorage for language pref | Non-destructive settings auto-save immediately | 2026-02-02 |
 | NotificationCenter for transcription | Decoupled results ready for Phase 4 paste | 2026-02-02 |
 | Async Task spawn from hotkey | Non-blocking transcription from sync callback | 2026-02-02 |
+| 150ms paste delay | Safe timing for clipboard-to-paste workflow | 2026-02-02 |
+| Smart spacing before paste | Natural continuation without manual spacing | 2026-02-02 |
+| Notification fallback for paste | Graceful degradation when no text field focused | 2026-02-02 |
 
 ### Active TODOs
 
@@ -82,7 +85,10 @@
 - [x] Execute Plan 03-01 (Transcription API & Language Settings)
 - [x] Execute Plan 03-02 (TranscriptionManager integration)
 - [x] Complete Phase 3
-- [ ] Execute Phase 4 (Output & Paste)
+- [x] Plan Phase 4 (2 plans created)
+- [x] Execute Plan 04-01 (PasteManager service)
+- [ ] Execute Plan 04-02 (AppDelegate integration)
+- [ ] Complete Phase 4
 
 ### Known Blockers
 
@@ -138,23 +144,31 @@ None currently.
 - Service orchestration: TranscriptionManager coordinates HotkeyManager -> APIClient
 - Language preference flow: UserDefaults -> TranscriptionManager -> APIClient
 
+**Patterns Established (Plan 04-01):**
+- Clipboard operations: NSPasteboard.general clearContents + setString
+- Paste simulation: CGEvent with virtualKey 9 (V) + maskCommand flag
+- Text field detection: AXUIElementCopyAttributeValue with role checking
+- Cursor context: AXSelectedTextRangeAttribute + AXValueAttribute for smart spacing
+- Clipboard-write-then-paste workflow with 150ms delay
+- Notification fallback via UNUserNotificationCenter
+
 ## Session Continuity
 
 **Last Session:** 2026-02-02
-**Stopped at:** Completed Plan 03-02 (Phase 3 complete)
+**Stopped at:** Completed Plan 04-01
 **Resume file:** None
 
-**Next Step:** Begin Phase 4 (Output & Paste)
+**Next Step:** Execute Plan 04-02 (AppDelegate integration)
 
 **Context for Next Session:**
-- Phase 3 complete: All TRX requirements verified
-- TranscriptionManager handles recording -> transcription flow
-- `.transcriptionDidComplete` notification broadcasts text results
-- Ready for Phase 4: Wire notification to CGEvent paste
-- Requirements ready: OUT-01 to OUT-03
+- Plan 04-01 complete: PasteManager service created
+- PasteManager.pasteText() available for AppDelegate integration
+- Plan 04-02: Wire transcription notification observer to PasteManager
+- Plan 04-02: Configure UNUserNotificationCenter delegate
+- Wave structure: 04-01 (wave 1 ✓) -> 04-02 (wave 2)
 
 ---
 
 *State initialized: 2026-02-02*
-*Last plan completed: 03-02 SUMMARY (2026-02-02)*
-*Phase 3 complete - Ready for Phase 4*
+*Last plan completed: 04-01 SUMMARY (2026-02-02)*
+*Phase 4 in progress - 1/2 plans complete*
