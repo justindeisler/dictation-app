@@ -66,6 +66,8 @@ final class PasteManager {
         // Verify accessibility permission (defensive check)
         guard AXIsProcessTrusted() else {
             print("Accessibility permission not granted - cannot simulate paste")
+            // Show guidance to help user enable accessibility
+            PermissionManager.shared.showAccessibilityPermissionGuidance()
             return false
         }
 
