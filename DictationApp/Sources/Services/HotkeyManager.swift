@@ -1,5 +1,6 @@
 import KeyboardShortcuts
 import Foundation
+import AppKit
 
 // MARK: - Keyboard Shortcut Names
 
@@ -38,6 +39,19 @@ final class HotkeyManager {
         }
     }
 
+    /// Check if API key is configured (ERR-03)
+    /// - Returns: true if API key exists, false otherwise
+    private func checkAPIKeyBeforeRecording() -> Bool {
+        guard KeychainManager.shared.hasAPIKey() else {
+            // Get AppDelegate reference to show alert
+            if let appDelegate = NSApp.delegate as? AppDelegate {
+                appDelegate.showMissingAPIKeyAlert()
+            }
+            return false
+        }
+        return true
+    }
+
     /// Handle hotkey press - toggle recording state with permission checks
     private func handleHotkeyPressed() async {
         let recorder = AudioRecorder.shared
@@ -58,6 +72,12 @@ final class HotkeyManager {
                 }
             }
         } else {
+            // Check API key FIRST before even checking permissions (ERR-03)
+            // No point recording if we can't transcribe
+            guard checkAPIKeyBeforeRecording() else {
+                return
+            }
+
             // Check microphone permission before recording (PRM-01)
             let micStatus = permission.checkMicrophonePermission()
 
