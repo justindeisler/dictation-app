@@ -140,6 +140,13 @@ Plans:
 
 **Dependencies:** All previous phases (error handling touches all workflows)
 
+**Plans:** 3 plans in 2 waves
+
+Plans:
+- [ ] 05-01-PLAN.md — Error notification system with throttling (ERR-01, ERR-02)
+- [ ] 05-02-PLAN.md — Missing API key handling with blocking alert (ERR-03)
+- [ ] 05-03-PLAN.md — Menu bar visual states and network error handling (ERR-04)
+
 **Notes:** Adds UNUserNotificationCenter notifications and edge case handling. Refines visual states and UX polish.
 
 ---
@@ -197,4 +204,5 @@ Research identified 7-phase, 14-day build order. Quick depth setting compressed 
 *Phase 2 completed: 2026-02-02*
 *Phase 3 completed: 2026-02-02*
 *Phase 4 completed: 2026-02-02*
-*Next step: `/gsd:plan-phase 5` or `/gsd:discuss-phase 5`*
+*Phase 5 planned: 2026-02-03*
+*Next step: `/gsd:execute-phase 5`*
