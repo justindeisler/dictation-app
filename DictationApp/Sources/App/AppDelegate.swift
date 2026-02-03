@@ -100,6 +100,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, UNUserNotifi
 
         center.setNotificationCategories([category])
 
+        // Register error notification categories (ERR-01, ERR-02)
+        ErrorNotifier.shared.setupNotificationCategories()
+
         // Request notification authorization
         center.requestAuthorization(options: [.alert, .sound]) { granted, error in
             if let error = error {
@@ -119,6 +122,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, UNUserNotifi
             name: .transcriptionDidComplete,
             object: nil
         )
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleTranscriptionFailed),
+            name: .transcriptionDidFail,
+            object: nil
+        )
     }
 
     @objc func handleTranscriptionComplete(_ notification: Notification) {
@@ -130,6 +139,34 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, UNUserNotifi
         // Trigger automatic paste (OUT-03)
         Task {
             await PasteManager.shared.pasteText(text)
+        }
+    }
+
+    @objc func handleTranscriptionFailed(_ notification: Notification) {
+        // TranscriptionManager posts error.userMessage as notification.object (string)
+        // Support both: Error in userInfo (preferred) or legacy string as object
+        let error: Error
+
+        if let apiError = notification.userInfo?["error"] as? Error {
+            error = apiError
+        } else if let errorMessage = notification.object as? String {
+            // Legacy support: TranscriptionManager posts error.userMessage as object
+            error = NSError(
+                domain: "TranscriptionError",
+                code: -1,
+                userInfo: [NSLocalizedDescriptionKey: errorMessage]
+            )
+        } else {
+            error = NSError(
+                domain: "TranscriptionError",
+                code: -1,
+                userInfo: [NSLocalizedDescriptionKey: "Unknown transcription error"]
+            )
+        }
+
+        // Route to ErrorNotifier for user notification with throttling
+        Task {
+            await ErrorNotifier.shared.showTranscriptionError(error)
         }
     }
 
@@ -253,6 +290,36 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, UNUserNotifi
         alert.messageText = "Keyboard Shortcuts"
         alert.informativeText = "Option + Space: Toggle recording\n\nStart dictating and your words will appear in the active text field."
         alert.runModal()
+    }
+
+    /// Show blocking alert when API key is missing (ERR-03)
+    func showMissingAPIKeyAlert() {
+        let alert = NSAlert()
+        alert.messageText = "API Key Required"
+        alert.informativeText = """
+        DictationApp needs a Groq API key to transcribe your recordings.
+
+        You can get a free API key from console.groq.com
+        """
+        alert.alertStyle = .informational
+        alert.addButton(withTitle: "Open Settings")
+        alert.addButton(withTitle: "Get API Key")
+        alert.addButton(withTitle: "Later")
+
+        let response = alert.runModal()
+
+        switch response {
+        case .alertFirstButtonReturn:  // Open Settings
+            openSettings()
+
+        case .alertSecondButtonReturn: // Get API Key
+            if let url = URL(string: "https://console.groq.com/keys") {
+                NSWorkspace.shared.open(url)
+            }
+
+        default:
+            break  // Later - do nothing
+        }
     }
 
     @objc func toggleLaunchAtLogin(_ sender: NSMenuItem) {
