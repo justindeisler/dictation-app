@@ -4,9 +4,9 @@
 
 ## Current Status
 
-- **Phase:** 5 of 5 (Error Handling & Polish) - In Progress
-- **Active Plan:** 05-02 complete
-- **Status:** Phase 5 in progress (2/3 plans complete)
+- **Phase:** 5 of 5 (Error Handling & Polish) - Complete
+- **Active Plan:** 05-03 complete
+- **Status:** All phases complete!
 
 ## Project Reference
 
@@ -20,12 +20,12 @@
 
 ## Current Position
 
-**Phase:** 5 of 5 (Error Handling & Polish) - In Progress
-**Plan:** 2 of 3 complete
-**Progress:** ●●●●◐ (4 phases complete, Phase 5 in progress)
+**Phase:** 5 of 5 (Error Handling & Polish) - Complete
+**Plan:** 3 of 3 complete
+**Progress:** ●●●●● (All 5 phases complete)
 
 ```
-[████████████████████████████████████████] ~93%
+[████████████████████████████████████████] 100%
 ```
 
 ## Phase Progress
@@ -36,7 +36,7 @@
 | 2 | Core Recording & Permissions | ● Complete | 2/2 | 7 (REC-01 to REC-04, PRM-01 to PRM-03) |
 | 3 | Transcription & API | ● Complete | 2/2 | 5 (TRX-01 to TRX-05) |
 | 4 | Output & Paste | ● Complete | 2/2 | 3 (OUT-01 to OUT-03) |
-| 5 | Error Handling & Polish | ◐ In Progress | 2/3 | 4 (ERR-01 to ERR-04) |
+| 5 | Error Handling & Polish | ● Complete | 3/3 | 4 (ERR-01 to ERR-04) |
 
 **Legend:** ○ Pending | ◐ In Progress | ● Completed
 
@@ -44,7 +44,7 @@
 
 **Velocity:** Plans executing in 2-15 min each
 **Quality:** Build succeeds, all verification criteria met
-**Coverage:** 23/24 requirements complete (96%)
+**Coverage:** 24/24 requirements complete (100%)
 
 ## Accumulated Context
 
@@ -75,6 +75,8 @@
 | 5-second throttle interval | Prevents notification spam while allowing timely error feedback | 2026-02-03 |
 | Dual error format support | Handle both Error in userInfo and legacy string as object | 2026-02-03 |
 | API key check before microphone | Faster feedback, no point recording if can't transcribe | 2026-02-03 |
+| Blue for processing state | Distinct from red (recording), indicates ongoing work | 2026-02-03 |
+| Error state auto-reset (2s) | Brief enough to not clutter, long enough to notice | 2026-02-03 |
 
 ### Active TODOs
 
@@ -96,104 +98,35 @@
 - [x] Plan Phase 5
 - [x] Execute Plan 05-01 (Error Notification System)
 - [x] Execute Plan 05-02 (Missing API Key Handling)
-- [ ] Execute Plan 05-03 (Recording Failure Handling)
-- [ ] Complete Phase 5 (final phase!)
+- [x] Execute Plan 05-03 (Visual Feedback & Network Errors)
+- [x] Complete Phase 5 (final phase!)
 
 ### Known Blockers
 
-None currently.
+None - project complete!
 
 ### Technical Notes
 
-**Research Highlights:**
-- Sandboxing decision made: Non-sandboxed for Developer ID distribution
-- Microphone permission silent failures on Sonoma 14.2+ need careful testing
-- API timeout handling critical (3+ minute timeout, chunking for long recordings)
-- CGEvent paste requires accessibility permissions (enabled by non-sandbox choice)
-
-**Patterns Established (Plan 01-01):**
-- AppKit AppDelegate manages menu bar, SwiftUI for windows
-- NSApplicationDelegateAdaptor bridges SwiftUI App to AppDelegate
-- SF Symbols with isTemplate for menu bar icons
-
-**Patterns Established (Plan 01-02):**
-- KeychainAccess library for secure credential storage
-- Async API validation before saving credentials
-- SwiftUI Form with SecureField for masked input
-- NSHostingController for presenting SwiftUI in floating window
-- Sendable/MainActor for Swift 6 concurrency safety
-
-**Patterns Established (Plan 01-03):**
-- @MainActor for Swift 6 concurrency on singleton services
-- NSMenuDelegate for dynamic menu state updates
-- System Settings deep links (x-apple.systempreferences:)
-- SMAppService.mainApp for launch at login
-
-**Patterns Established (Plan 02-01):**
-- nonisolated func for C API calls with concurrency-unsafe globals
-- AudioRecorderError with LocalizedError for user-facing error messages
-- PermissionManager for microphone/accessibility permission lifecycle
-- AudioRecorder for 16kHz mono WAV recording to temp files
-
-**Patterns Established (Plan 02-02):**
-- KeyboardShortcuts.Name extension for defining app hotkeys
-- NotificationCenter for decoupled recording state updates
-- NSImage.SymbolConfiguration(paletteColors:) for colored menu bar SF Symbols
-- HotkeyManager for centralized hotkey registration and handling
-
-**Patterns Established (Plan 03-01):**
-- Multipart form-data with Data extension for `append(_ string:)`
-- Separate URLSession configs for different timeout requirements
-- UUID boundary for multipart collision resistance
-- @AppStorage for instant-persist preferences without Save button
-
-**Patterns Established (Plan 03-02):**
-- NotificationCenter broadcasting for transcription results
-- Async Task spawning from synchronous hotkey callbacks
-- Service orchestration: TranscriptionManager coordinates HotkeyManager -> APIClient
-- Language preference flow: UserDefaults -> TranscriptionManager -> APIClient
-
-**Patterns Established (Plan 04-01):**
-- Clipboard operations: NSPasteboard.general clearContents + setString
-- Paste simulation: CGEvent with virtualKey 9 (V) + maskCommand flag
-- Text field detection: AXUIElementCopyAttributeValue with role checking
-- Cursor context: AXSelectedTextRangeAttribute + AXValueAttribute for smart spacing
-- Clipboard-write-then-paste workflow with 150ms delay
-- Notification fallback via UNUserNotificationCenter
-
-**Patterns Established (Plan 04-02):**
-- Transcription observer: .transcriptionDidComplete -> handleTranscriptionComplete -> PasteManager.pasteText
-- Notification delegate: UNUserNotificationCenterDelegate with nonisolated methods
-- Permission guidance: Show alert with System Settings deep link on failure
-- Always attempt paste regardless of detected element type
-
-**Patterns Established (Plan 05-01):**
-- NotificationThrottler singleton with category-based time tracking
-- ErrorCategory constants for notification categorization
-- Error-to-category mapping based on APIError case
-- Async Task spawn from @objc handler for MainActor-isolated operations
-
-**Patterns Established (Plan 05-02):**
-- Pre-flight validation: check API key before expensive operations
-- AppDelegate method invocation from service via NSApp.delegate cast
-- Pre-recording validation chain: API key -> microphone permission -> start recording
+**Patterns Established (Plan 05-03):**
+- Menu bar icon state machine: idle -> recording -> processing -> idle/error
+- transcriptionWillStart notification before API call
+- URLError-specific catch block for network error differentiation
+- Error state auto-reset with Task.sleep and conditional check
 
 ## Session Continuity
 
 **Last Session:** 2026-02-03
-**Stopped at:** Completed 05-02-PLAN.md
+**Stopped at:** Completed 05-03-PLAN.md - ALL PHASES COMPLETE
 **Resume file:** None
 
-**Next Step:** Execute Plan 05-03 (Recording Failure Handling)
-
-**Context for Next Session:**
-- Plan 05-02 complete: API key validation before recording (ERR-03)
-- checkAPIKeyBeforeRecording in HotkeyManager with blocking alert
-- showMissingAPIKeyAlert provides Open Settings / Get API Key / Later options
-- Remaining: ERR-04 (recording failure handling) in Plan 05-03
+**Project Complete!**
+- All 5 phases executed successfully
+- All 24 requirements implemented
+- 12 plans total across 5 phases
+- App ready for testing and distribution
 
 ---
 
 *State initialized: 2026-02-02*
-*Last plan completed: 05-02 SUMMARY (2026-02-03)*
-*Phase 5 in progress - Plan 05-02 complete (2/3)*
+*Last plan completed: 05-03 SUMMARY (2026-02-03)*
+*PROJECT COMPLETE - All 5 phases done*
