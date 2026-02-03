@@ -2,7 +2,7 @@
 
 ## What This Is
 
-A native macOS menu bar dictation app that captures speech via a global hotkey and pastes transcribed text into any active text field. Uses Groq's Whisper API for fast, accurate transcription. Built for coding workflows — specifically for dictating descriptions and requests while working with Claude Code.
+A native macOS menu bar dictation app that captures speech via a global hotkey (Option+Space) and pastes transcribed text into any active text field. Uses Groq's Whisper API for fast, accurate transcription in English and German. Built for coding workflows — specifically for dictating descriptions and requests while working with Claude Code.
 
 ## Core Value
 
@@ -12,18 +12,20 @@ Press a hotkey, speak naturally, and have your words appear as text in whatever 
 
 ### Validated
 
-(None yet — ship to validate)
+- Global toggle hotkey (Option+Space) starts/stops recording — v1.0
+- Visual indicator in menu bar while recording (red mic icon) — v1.0
+- Audio sent to Groq Whisper API for transcription — v1.0
+- Transcribed text pasted into active text field — v1.0
+- English and German language support (auto-detect or preference) — v1.0
+- Error notifications that explain why transcription failed — v1.0
+- Settings window for API key configuration — v1.0
+- Menu bar app (no dock icon) — v1.0
+- Launch at login option — v1.0
+- Microphone and Accessibility permission flows — v1.0
 
 ### Active
 
-- [ ] Global toggle hotkey (Option+Space) starts/stops recording
-- [ ] Visual indicator in menu bar while recording (red mic icon)
-- [ ] Audio sent to Groq Whisper API for transcription
-- [ ] Transcribed text pasted into active text field
-- [ ] English and German language support (auto-detect or preference)
-- [ ] Error notifications that explain why transcription failed
-- [ ] Settings window for API key configuration
-- [ ] Menu bar app (no dock icon)
+(None yet — see v2 requirements in next milestone planning)
 
 ### Out of Scope
 
@@ -32,41 +34,48 @@ Press a hotkey, speak naturally, and have your words appear as text in whatever 
 - Transcription history — not needed for the dictate-and-paste workflow
 - Visual waveform during recording — simple indicator is enough
 - Sound effects — visual feedback is sufficient
-- Launch at login — can be added via System Settings manually
+- Real-time streaming transcription — Groq API doesn't support streaming well
+- Offline transcription — network requirement is acceptable
 
 ## Context
 
-**Primary use case:** Dictating descriptions of what to build while working with Claude Code. Natural language, not code syntax — things like "create a function that validates user input" rather than literal code.
+**Current state:** Shipped v1.0 with 1,726 LOC Swift.
 
-**Why custom app:** Ownership and control. Built specifically for this workflow rather than adapting a general-purpose tool.
+**Tech stack:** Swift 6.0, SwiftUI + AppKit hybrid, AVFoundation, URLSession, Groq Whisper API
 
-**Technical environment:**
-- macOS (Sonoma and later)
-- Requires microphone permission
-- Requires Accessibility permission for keyboard simulation
-- Requires network access for Groq API
+**Key dependencies:**
+- KeyboardShortcuts (Sindre Sorhus) — global hotkey registration
+- KeychainAccess — secure API key storage
 
-**Groq API:**
-- Model: `whisper-large-v3-turbo` (fastest, most accurate)
-- Free tier: ~50 hours/month transcription
-- Endpoint: `https://api.groq.com/openai/v1/audio/transcriptions`
+**Architecture:**
+- AppDelegate-based lifecycle with NSStatusItem
+- Service singletons: PermissionManager, AudioRecorder, HotkeyManager, TranscriptionManager, PasteManager, ErrorNotifier
+- NotificationCenter for decoupled event handling
+- CGEvent for keyboard simulation (requires non-sandboxed)
+
+**Primary use case:** Dictating descriptions of what to build while working with Claude Code. Natural language, not code syntax.
 
 ## Constraints
 
 - **Platform**: macOS only — native Swift/SwiftUI implementation
 - **API**: Groq Whisper — no offline transcription, requires network
 - **Permissions**: Must handle microphone + Accessibility permission flows gracefully
-- **Audio format**: M4A at 16kHz mono — optimal for speech, compatible with Whisper
+- **Audio format**: 16kHz mono WAV — optimal for speech, compatible with Whisper
+- **Distribution**: Non-sandboxed — required for CGEvent.post() paste functionality
 
 ## Key Decisions
 
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
-| Toggle mode over push-to-talk | Better for longer dictation sessions, user preference | — Pending |
-| Carbon API for hotkey | Reliable global hotkey registration on macOS | — Pending |
-| CGEvent for paste simulation | Standard approach for keyboard simulation | — Pending |
-| UserDefaults for API key storage | Simplicity for v1; Keychain for production later | — Pending |
-| Auto-detect language | Whisper handles multi-language well; reduces friction | — Pending |
+| Toggle mode over push-to-talk | Better for longer dictation sessions | Good — natural workflow |
+| KeyboardShortcuts library for hotkey | Reliable global hotkey registration | Good — works perfectly |
+| CGEvent for paste simulation | Standard approach for keyboard simulation | Good — works in all apps |
+| Keychain for API key storage | Secure storage via KeychainAccess | Good — secure and persistent |
+| Auto-detect language | Whisper handles multi-language well | Good — reduces friction |
+| Non-sandboxed distribution | Required for CGEvent.post() | Necessary — no alternative |
+| 60-second transcription timeout | Audio processing takes time | Good — handles long recordings |
+| NSStatusItem over MenuBarExtra | Better macOS 14.0 compatibility | Good — reliable icon control |
+| 5-phase quick roadmap | Compressed 7-phase research to critical path | Good — shipped in 2 days |
 
 ---
-*Last updated: 2026-02-02 after initialization*
+*Last updated: 2026-02-03 after v1.0 milestone*
