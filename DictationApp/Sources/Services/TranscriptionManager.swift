@@ -49,16 +49,41 @@ final class TranscriptionManager {
             return result.text
         } catch let error as APIError {
             print("Transcription failed: \(error.userMessage)")
+
+            // Post error with full context for ErrorNotifier (ERR-01, ERR-02, ERR-04)
             NotificationCenter.default.post(
                 name: .transcriptionDidFail,
-                object: error.userMessage
+                object: nil,
+                userInfo: ["error": error]
+            )
+            return nil
+        } catch let error as URLError {
+            // Handle URLError specifically for better network error messages (ERR-04)
+            print("Network error during transcription: \(error.localizedDescription)")
+
+            let apiError: APIError
+            switch error.code {
+            case .notConnectedToInternet, .networkConnectionLost:
+                apiError = .networkError(error)
+            case .timedOut:
+                apiError = .timeout
+            default:
+                apiError = .networkError(error)
+            }
+
+            NotificationCenter.default.post(
+                name: .transcriptionDidFail,
+                object: nil,
+                userInfo: ["error": apiError]
             )
             return nil
         } catch {
             print("Transcription failed: \(error.localizedDescription)")
+
             NotificationCenter.default.post(
                 name: .transcriptionDidFail,
-                object: error.localizedDescription
+                object: nil,
+                userInfo: ["error": error]
             )
             return nil
         }
