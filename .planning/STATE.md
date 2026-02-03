@@ -1,12 +1,12 @@
 # Project State: MacWhisperDictation
 
-**Last Updated:** 2026-02-02
+**Last Updated:** 2026-02-03
 
 ## Current Status
 
-- **Phase:** 5 of 5 (Error Handling & Polish) - Ready to Plan
-- **Active Plan:** None - needs planning
-- **Status:** Phase 4 complete, Phase 5 pending
+- **Phase:** 5 of 5 (Error Handling & Polish) - In Progress
+- **Active Plan:** 05-01 complete
+- **Status:** Phase 5 in progress (1/2 plans complete)
 
 ## Project Reference
 
@@ -20,12 +20,12 @@
 
 ## Current Position
 
-**Phase:** 5 of 5 (Error Handling & Polish) - Ready to Plan
-**Plan:** None - needs planning
-**Progress:** ●●●●○ (4 phases complete, Phase 5 pending)
+**Phase:** 5 of 5 (Error Handling & Polish) - In Progress
+**Plan:** 1 of 2 complete
+**Progress:** ●●●●◐ (4 phases complete, Phase 5 in progress)
 
 ```
-[████████████████████████████████████████] ~80%
+[██████████████████████████████████████░░] ~90%
 ```
 
 ## Phase Progress
@@ -36,15 +36,15 @@
 | 2 | Core Recording & Permissions | ● Complete | 2/2 | 7 (REC-01 to REC-04, PRM-01 to PRM-03) |
 | 3 | Transcription & API | ● Complete | 2/2 | 5 (TRX-01 to TRX-05) |
 | 4 | Output & Paste | ● Complete | 2/2 | 3 (OUT-01 to OUT-03) |
-| 5 | Error Handling & Polish | ○ Pending | 0/? | 4 (ERR-01 to ERR-04) |
+| 5 | Error Handling & Polish | ◐ In Progress | 1/2 | 4 (ERR-01 to ERR-04) |
 
 **Legend:** ○ Pending | ◐ In Progress | ● Completed
 
 ## Performance Metrics
 
-**Velocity:** Plans executing in 3-15 min each
+**Velocity:** Plans executing in 2-15 min each
 **Quality:** Build succeeds, all verification criteria met
-**Coverage:** 20/24 requirements complete (83%)
+**Coverage:** 22/24 requirements complete (92%)
 
 ## Accumulated Context
 
@@ -72,6 +72,8 @@
 | Skip strict text field role check | Too restrictive - attempt paste in any context | 2026-02-02 |
 | Always copy to clipboard first | Guaranteed fallback if paste simulation fails | 2026-02-02 |
 | Accessibility guidance on failure | Clear user guidance when permission needed | 2026-02-02 |
+| 5-second throttle interval | Prevents notification spam while allowing timely error feedback | 2026-02-03 |
+| Dual error format support | Handle both Error in userInfo and legacy string as object | 2026-02-03 |
 
 ### Active TODOs
 
@@ -90,8 +92,9 @@
 - [x] Execute Plan 04-01 (PasteManager service)
 - [x] Execute Plan 04-02 (AppDelegate integration)
 - [x] Complete Phase 4
-- [ ] Plan Phase 5
-- [ ] Execute Phase 5
+- [x] Plan Phase 5
+- [x] Execute Plan 05-01 (Error Notification System)
+- [ ] Execute Plan 05-02 (if exists) or Complete Phase 5
 - [ ] Complete Phase 5 (final phase!)
 
 ### Known Blockers
@@ -162,22 +165,28 @@ None currently.
 - Permission guidance: Show alert with System Settings deep link on failure
 - Always attempt paste regardless of detected element type
 
+**Patterns Established (Plan 05-01):**
+- NotificationThrottler singleton with category-based time tracking
+- ErrorCategory constants for notification categorization
+- Error-to-category mapping based on APIError case
+- Async Task spawn from @objc handler for MainActor-isolated operations
+
 ## Session Continuity
 
-**Last Session:** 2026-02-02
-**Stopped at:** Phase 4 complete
+**Last Session:** 2026-02-03
+**Stopped at:** Completed 05-01-PLAN.md
 **Resume file:** None
 
-**Next Step:** Plan Phase 5 (Error Handling & Polish)
+**Next Step:** Execute Plan 05-02 (if exists) or check if Phase 5 is complete
 
 **Context for Next Session:**
-- Phase 4 complete: All OUT requirements verified, automatic paste working
-- End-to-end workflow complete: hotkey → record → transcribe → paste
-- Phase 5 requirements: ERR-01 to ERR-04 (error notifications, graceful handling)
-- Foundation in place: notification infrastructure, permission guidance patterns
+- Plan 05-01 complete: Error notification system with throttling (ERR-01, ERR-02)
+- ErrorNotifier and NotificationThrottler services created
+- transcriptionDidFail observer wired in AppDelegate
+- Remaining: ERR-03, ERR-04 (graceful error recovery, permission handling) - check if Plan 05-02 exists
 
 ---
 
 *State initialized: 2026-02-02*
-*Last plan completed: 04-02 SUMMARY (2026-02-02)*
-*Phase 4 complete - Ready for Phase 5 planning*
+*Last plan completed: 05-01 SUMMARY (2026-02-03)*
+*Phase 5 in progress - Plan 05-01 complete*
