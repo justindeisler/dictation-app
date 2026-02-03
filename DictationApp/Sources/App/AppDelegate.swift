@@ -8,11 +8,15 @@ import UserNotifications
 enum MenuBarIconState {
     case idle
     case recording
+    case processing    // Transcribing in progress (ERR-04)
+    case error         // Transient error indicator (ERR-04)
 
     var symbolName: String {
         switch self {
         case .idle: return "waveform"
         case .recording: return "waveform.circle.fill"
+        case .processing: return "waveform.badge.ellipsis"
+        case .error: return "waveform.badge.exclamationmark"
         }
     }
 
@@ -20,14 +24,13 @@ enum MenuBarIconState {
         switch self {
         case .idle: return nil  // Uses template mode (adapts to light/dark)
         case .recording: return .systemRed
+        case .processing: return .systemBlue
+        case .error: return .systemYellow
         }
     }
 
     var isTemplate: Bool {
-        switch self {
-        case .idle: return true
-        case .recording: return false  // Explicit color, not template
-        }
+        self == .idle  // Only idle uses template mode
     }
 }
 
@@ -175,21 +178,42 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, UNUserNotifi
     func updateMenuBarIcon(state: MenuBarIconState) {
         guard let button = statusItem?.button else { return }
 
-        let accessibilityDesc = state == .recording ? "Recording" : "Dictation"
+        let accessibilityDesc: String
+        switch state {
+        case .idle:
+            accessibilityDesc = "Dictation"
+        case .recording:
+            accessibilityDesc = "Recording"
+        case .processing:
+            accessibilityDesc = "Transcribing"
+        case .error:
+            accessibilityDesc = "Error"
+        }
 
-        if state == .recording {
-            // Use symbol configuration with red color for recording state
-            let config = NSImage.SymbolConfiguration(paletteColors: [.systemRed])
-            if let image = NSImage(systemSymbolName: state.symbolName, accessibilityDescription: accessibilityDesc)?
-                .withSymbolConfiguration(config) {
-                image.isTemplate = false  // Don't adapt to menu bar appearance
-                button.image = image
-            }
-        } else {
-            // Use template mode for idle state (adapts to light/dark)
+        if state == .idle {
+            // Template mode for idle (adapts to light/dark)
             let image = NSImage(systemSymbolName: state.symbolName, accessibilityDescription: accessibilityDesc)
             image?.isTemplate = true
             button.image = image
+        } else {
+            // Explicit color for non-idle states
+            let config = NSImage.SymbolConfiguration(paletteColors: [state.tintColor ?? .controlAccentColor])
+            if let image = NSImage(systemSymbolName: state.symbolName, accessibilityDescription: accessibilityDesc)?
+                .withSymbolConfiguration(config) {
+                image.isTemplate = false
+                button.image = image
+            }
+        }
+
+        // Auto-reset error state to idle after 2 seconds (ERR-04)
+        if state == .error {
+            Task { @MainActor in
+                try? await Task.sleep(nanoseconds: 2_000_000_000)
+                // Only reset if still showing error (user might have started new recording)
+                if button.image?.accessibilityDescription == "Error" {
+                    updateMenuBarIcon(state: .idle)
+                }
+            }
         }
     }
 
