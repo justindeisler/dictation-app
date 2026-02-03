@@ -5,8 +5,8 @@
 ## Current Status
 
 - **Phase:** 5 of 5 (Error Handling & Polish) - In Progress
-- **Active Plan:** 05-01 complete
-- **Status:** Phase 5 in progress (1/2 plans complete)
+- **Active Plan:** 05-02 complete
+- **Status:** Phase 5 in progress (2/3 plans complete)
 
 ## Project Reference
 
@@ -21,11 +21,11 @@
 ## Current Position
 
 **Phase:** 5 of 5 (Error Handling & Polish) - In Progress
-**Plan:** 1 of 2 complete
+**Plan:** 2 of 3 complete
 **Progress:** ●●●●◐ (4 phases complete, Phase 5 in progress)
 
 ```
-[██████████████████████████████████████░░] ~90%
+[████████████████████████████████████████] ~93%
 ```
 
 ## Phase Progress
@@ -36,7 +36,7 @@
 | 2 | Core Recording & Permissions | ● Complete | 2/2 | 7 (REC-01 to REC-04, PRM-01 to PRM-03) |
 | 3 | Transcription & API | ● Complete | 2/2 | 5 (TRX-01 to TRX-05) |
 | 4 | Output & Paste | ● Complete | 2/2 | 3 (OUT-01 to OUT-03) |
-| 5 | Error Handling & Polish | ◐ In Progress | 1/2 | 4 (ERR-01 to ERR-04) |
+| 5 | Error Handling & Polish | ◐ In Progress | 2/3 | 4 (ERR-01 to ERR-04) |
 
 **Legend:** ○ Pending | ◐ In Progress | ● Completed
 
@@ -44,7 +44,7 @@
 
 **Velocity:** Plans executing in 2-15 min each
 **Quality:** Build succeeds, all verification criteria met
-**Coverage:** 22/24 requirements complete (92%)
+**Coverage:** 23/24 requirements complete (96%)
 
 ## Accumulated Context
 
@@ -74,6 +74,7 @@
 | Accessibility guidance on failure | Clear user guidance when permission needed | 2026-02-02 |
 | 5-second throttle interval | Prevents notification spam while allowing timely error feedback | 2026-02-03 |
 | Dual error format support | Handle both Error in userInfo and legacy string as object | 2026-02-03 |
+| API key check before microphone | Faster feedback, no point recording if can't transcribe | 2026-02-03 |
 
 ### Active TODOs
 
@@ -94,7 +95,8 @@
 - [x] Complete Phase 4
 - [x] Plan Phase 5
 - [x] Execute Plan 05-01 (Error Notification System)
-- [ ] Execute Plan 05-02 (if exists) or Complete Phase 5
+- [x] Execute Plan 05-02 (Missing API Key Handling)
+- [ ] Execute Plan 05-03 (Recording Failure Handling)
 - [ ] Complete Phase 5 (final phase!)
 
 ### Known Blockers
@@ -171,22 +173,27 @@ None currently.
 - Error-to-category mapping based on APIError case
 - Async Task spawn from @objc handler for MainActor-isolated operations
 
+**Patterns Established (Plan 05-02):**
+- Pre-flight validation: check API key before expensive operations
+- AppDelegate method invocation from service via NSApp.delegate cast
+- Pre-recording validation chain: API key -> microphone permission -> start recording
+
 ## Session Continuity
 
 **Last Session:** 2026-02-03
-**Stopped at:** Completed 05-01-PLAN.md
+**Stopped at:** Completed 05-02-PLAN.md
 **Resume file:** None
 
-**Next Step:** Execute Plan 05-02 (if exists) or check if Phase 5 is complete
+**Next Step:** Execute Plan 05-03 (Recording Failure Handling)
 
 **Context for Next Session:**
-- Plan 05-01 complete: Error notification system with throttling (ERR-01, ERR-02)
-- ErrorNotifier and NotificationThrottler services created
-- transcriptionDidFail observer wired in AppDelegate
-- Remaining: ERR-03, ERR-04 (graceful error recovery, permission handling) - check if Plan 05-02 exists
+- Plan 05-02 complete: API key validation before recording (ERR-03)
+- checkAPIKeyBeforeRecording in HotkeyManager with blocking alert
+- showMissingAPIKeyAlert provides Open Settings / Get API Key / Later options
+- Remaining: ERR-04 (recording failure handling) in Plan 05-03
 
 ---
 
 *State initialized: 2026-02-02*
-*Last plan completed: 05-01 SUMMARY (2026-02-03)*
-*Phase 5 in progress - Plan 05-01 complete*
+*Last plan completed: 05-02 SUMMARY (2026-02-03)*
+*Phase 5 in progress - Plan 05-02 complete (2/3)*
