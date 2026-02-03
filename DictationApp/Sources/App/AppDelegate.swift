@@ -77,8 +77,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, UNUserNotifi
     }
 
     @objc func handleRecordingStopped(_ notification: Notification) {
-        updateMenuBarIcon(state: .idle)
-        // notification.object contains the recording URL for Phase 3 transcription
+        // Don't reset to idle here - let transcription lifecycle handle icon state
+        // Recording stopped means we're transitioning to processing state
+        // The transcriptionWillStart notification will set processing
+        // The transcriptionDidComplete/transcriptionDidFail will reset to idle/error
     }
 
     // MARK: - Notification Setup
@@ -121,6 +123,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, UNUserNotifi
     private func setupTranscriptionObservers() {
         NotificationCenter.default.addObserver(
             self,
+            selector: #selector(handleTranscriptionWillStart),
+            name: .transcriptionWillStart,
+            object: nil
+        )
+        NotificationCenter.default.addObserver(
+            self,
             selector: #selector(handleTranscriptionComplete),
             name: .transcriptionDidComplete,
             object: nil
@@ -133,7 +141,14 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, UNUserNotifi
         )
     }
 
+    @objc func handleTranscriptionWillStart() {
+        updateMenuBarIcon(state: .processing)
+    }
+
     @objc func handleTranscriptionComplete(_ notification: Notification) {
+        // Reset icon to idle on successful transcription (ERR-04)
+        updateMenuBarIcon(state: .idle)
+
         guard let text = notification.object as? String else {
             print("Transcription notification missing text")
             return
@@ -146,6 +161,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, UNUserNotifi
     }
 
     @objc func handleTranscriptionFailed(_ notification: Notification) {
+        // Show error state in menu bar (transient, auto-resets - ERR-04)
+        updateMenuBarIcon(state: .error)
+
         // TranscriptionManager posts error.userMessage as notification.object (string)
         // Support both: Error in userInfo (preferred) or legacy string as object
         let error: Error

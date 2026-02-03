@@ -4,6 +4,7 @@ import Foundation
 
 /// Notification for transcription completion (ready for Phase 4 paste)
 extension Notification.Name {
+    static let transcriptionWillStart = Notification.Name("transcriptionWillStart")
     static let transcriptionDidComplete = Notification.Name("transcriptionDidComplete")
     static let transcriptionDidFail = Notification.Name("transcriptionDidFail")
 }
@@ -27,6 +28,12 @@ final class TranscriptionManager {
         // Stored by SettingsView @AppStorage("transcriptionLanguage")
         let languagePreference = UserDefaults.standard.string(forKey: "transcriptionLanguage") ?? "auto"
         let language: String? = languagePreference == "auto" ? nil : languagePreference
+
+        // Post notification that transcription is starting (for menu bar icon - ERR-04)
+        NotificationCenter.default.post(
+            name: .transcriptionWillStart,
+            object: nil
+        )
 
         do {
             print("Starting transcription for: \(audioURL.lastPathComponent)")
