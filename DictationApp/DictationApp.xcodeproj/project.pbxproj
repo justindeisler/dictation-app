@@ -20,9 +20,9 @@
 		E400002B1234567890123456 /* KeyboardShortcuts in Frameworks */ = {isa = PBXBuildFile; productRef = E400002C1234567890123456 /* KeyboardShortcuts */; };
 		E400002E1234567890123456 /* TranscriptionResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = E400002F1234567890123456 /* TranscriptionResult.swift */; };
 		E40000311234567890123456 /* TranscriptionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40000321234567890123456 /* TranscriptionManager.swift */; };
-		E46EC0343501722850571617 /* PasteManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C2E9A89385016420761957 /* PasteManager.swift */; };
 		E40000501234567890123456 /* NotificationThrottler.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40000511234567890123456 /* NotificationThrottler.swift */; };
 		E40000521234567890123456 /* ErrorNotifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40000531234567890123456 /* ErrorNotifier.swift */; };
+		E46EC0343501722850571617 /* PasteManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C2E9A89385016420761957 /* PasteManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,9 +40,9 @@
 		E400002A1234567890123456 /* HotkeyManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HotkeyManager.swift; sourceTree = "<group>"; };
 		E400002F1234567890123456 /* TranscriptionResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranscriptionResult.swift; sourceTree = "<group>"; };
 		E40000321234567890123456 /* TranscriptionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranscriptionManager.swift; sourceTree = "<group>"; };
-		E4C2E9A89385016420761957 /* PasteManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasteManager.swift; sourceTree = "<group>"; };
 		E40000511234567890123456 /* NotificationThrottler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationThrottler.swift; sourceTree = "<group>"; };
 		E40000531234567890123456 /* ErrorNotifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorNotifier.swift; sourceTree = "<group>"; };
+		E4C2E9A89385016420761957 /* PasteManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasteManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,12 +79,21 @@
 			path = Sources;
 			sourceTree = "<group>";
 		};
-		E40000301234567890123456 /* Models */ = {
+		E400000C1234567890123456 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				E400002F1234567890123456 /* TranscriptionResult.swift */,
+				E40000061234567890123456 /* DictationApp.app */,
 			);
-			path = Models;
+			name = Products;
+			sourceTree = "<group>";
+		};
+		E400000D1234567890123456 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				E40000001234567890123456 /* DictationAppApp.swift */,
+				E40000021234567890123456 /* AppDelegate.swift */,
+			);
+			path = App;
 			sourceTree = "<group>";
 		};
 		E400001B1234567890123456 /* Services */ = {
@@ -112,21 +121,12 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
-		E400000C1234567890123456 /* Products */ = {
+		E40000301234567890123456 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				E40000061234567890123456 /* DictationApp.app */,
+				E400002F1234567890123456 /* TranscriptionResult.swift */,
 			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		E400000D1234567890123456 /* App */ = {
-			isa = PBXGroup;
-			children = (
-				E40000001234567890123456 /* DictationAppApp.swift */,
-				E40000021234567890123456 /* AppDelegate.swift */,
-			);
-			path = App;
+			path = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -349,10 +349,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = DictationApp.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = YR4WG4W3YG;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Info.plist;
@@ -376,10 +377,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = DictationApp.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = YR4WG4W3YG;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Info.plist;

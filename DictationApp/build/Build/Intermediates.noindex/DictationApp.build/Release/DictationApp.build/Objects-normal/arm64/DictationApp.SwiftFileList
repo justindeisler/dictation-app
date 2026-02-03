@@ -1,0 +1,14 @@
+/Users/justindeisler/Desktop/Developing/Projects/DictationApp/DictationApp/Sources/App/DictationAppApp.swift
+/Users/justindeisler/Desktop/Developing/Projects/DictationApp/DictationApp/Sources/App/AppDelegate.swift
+/Users/justindeisler/Desktop/Developing/Projects/DictationApp/DictationApp/Sources/Services/KeychainManager.swift
+/Users/justindeisler/Desktop/Developing/Projects/DictationApp/DictationApp/Sources/Services/APIClient.swift
+/Users/justindeisler/Desktop/Developing/Projects/DictationApp/DictationApp/Sources/Views/SettingsView.swift
+/Users/justindeisler/Desktop/Developing/Projects/DictationApp/DictationApp/Sources/Services/LoginItemManager.swift
+/Users/justindeisler/Desktop/Developing/Projects/DictationApp/DictationApp/Sources/Services/PermissionManager.swift
+/Users/justindeisler/Desktop/Developing/Projects/DictationApp/DictationApp/Sources/Services/AudioRecorder.swift
+/Users/justindeisler/Desktop/Developing/Projects/DictationApp/DictationApp/Sources/Services/HotkeyManager.swift
+/Users/justindeisler/Desktop/Developing/Projects/DictationApp/DictationApp/Sources/Models/TranscriptionResult.swift
+/Users/justindeisler/Desktop/Developing/Projects/DictationApp/DictationApp/Sources/Services/TranscriptionManager.swift
+/Users/justindeisler/Desktop/Developing/Projects/DictationApp/DictationApp/Sources/Services/PasteManager.swift
+/Users/justindeisler/Desktop/Developing/Projects/DictationApp/DictationApp/Sources/Services/NotificationThrottler.swift
+/Users/justindeisler/Desktop/Developing/Projects/DictationApp/DictationApp/Sources/Services/ErrorNotifier.swift

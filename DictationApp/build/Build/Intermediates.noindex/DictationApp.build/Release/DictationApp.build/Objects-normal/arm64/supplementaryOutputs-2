@@ -1,0 +1,12 @@
+{
+  "/Users/justindeisler/Desktop/Developing/Projects/DictationApp/DictationApp/Sources/App/DictationAppApp.swift" : {
+    "abi-baseline-json" : "/Users/justindeisler/Desktop/Developing/Projects/DictationApp/DictationApp/build/Build/Intermediates.noindex/DictationApp.build/Release/DictationApp.build/Objects-normal/arm64/DictationApp.abi.json",
+    "const-values" : "/Users/justindeisler/Desktop/Developing/Projects/DictationApp/DictationApp/build/Build/Intermediates.noindex/DictationApp.build/Release/DictationApp.build/Objects-normal/arm64/DictationApp-primary.swiftconstvalues",
+    "dependencies" : "/Users/justindeisler/Desktop/Developing/Projects/DictationApp/DictationApp/build/Build/Intermediates.noindex/DictationApp.build/Release/DictationApp.build/Objects-normal/arm64/DictationApp-primary.d",
+    "diagnostics" : "/Users/justindeisler/Desktop/Developing/Projects/DictationApp/DictationApp/build/Build/Intermediates.noindex/DictationApp.build/Release/DictationApp.build/Objects-normal/arm64/DictationApp-primary.dia",
+    "objc-header" : "/Users/justindeisler/Desktop/Developing/Projects/DictationApp/DictationApp/build/Build/Intermediates.noindex/DictationApp.build/Release/DictationApp.build/Objects-normal/arm64/DictationApp-Swift.h",
+    "swiftdoc" : "/Users/justindeisler/Desktop/Developing/Projects/DictationApp/DictationApp/build/Build/Intermediates.noindex/DictationApp.build/Release/DictationApp.build/Objects-normal/arm64/DictationApp.swiftdoc",
+    "swiftmodule" : "/Users/justindeisler/Desktop/Developing/Projects/DictationApp/DictationApp/build/Build/Intermediates.noindex/DictationApp.build/Release/DictationApp.build/Objects-normal/arm64/DictationApp.swiftmodule",
+    "swiftsourceinfo" : "/Users/justindeisler/Desktop/Developing/Projects/DictationApp/DictationApp/build/Build/Intermediates.noindex/DictationApp.build/Release/DictationApp.build/Objects-normal/arm64/DictationApp.swiftsourceinfo"
+  }
+}

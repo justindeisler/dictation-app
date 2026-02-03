@@ -81,15 +81,13 @@ final class HotkeyManager {
             // Check microphone permission before recording (PRM-01)
             let micStatus = permission.checkMicrophonePermission()
 
-            if micStatus == .notDetermined {
+            // Always try to request permission if not granted - let macOS handle it
+            if micStatus != .granted {
                 let granted = await permission.requestMicrophonePermission()
                 if !granted {
                     permission.showMicrophonePermissionGuidance()
                     return
                 }
-            } else if micStatus == .denied {
-                permission.showMicrophonePermissionGuidance()
-                return
             }
 
             // Start recording (REC-01)

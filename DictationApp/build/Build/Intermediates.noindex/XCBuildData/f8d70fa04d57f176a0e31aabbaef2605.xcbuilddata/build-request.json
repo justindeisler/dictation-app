@@ -1,0 +1,66 @@
+{
+  "buildCommand" : {
+    "command" : "build",
+    "skipDependencies" : false,
+    "style" : "buildOnly"
+  },
+  "configuredTargets" : [
+    {
+      "guid" : "b5034e00803b22f0ad15975641285ddd0324a78f78860dee21e0d93c28f85158"
+    }
+  ],
+  "containerPath" : "/Users/justindeisler/Desktop/Developing/Projects/DictationApp/DictationApp/DictationApp.xcodeproj",
+  "continueBuildingAfterErrors" : false,
+  "dependencyScope" : "workspace",
+  "enableIndexBuildArena" : false,
+  "hideShellScriptEnvironment" : false,
+  "parameters" : {
+    "action" : "build",
+    "activeArchitecture" : "arm64",
+    "activeRunDestination" : {
+      "disableOnlyActiveArch" : false,
+      "platform" : "macosx",
+      "sdk" : "macosx26.2",
+      "sdkVariant" : "macos",
+      "supportedArchitectures" : [
+        "arm64e",
+        "arm64",
+        "x86_64"
+      ],
+      "targetArchitecture" : "arm64"
+    },
+    "arenaInfo" : {
+      "buildIntermediatesPath" : "/Users/justindeisler/Desktop/Developing/Projects/DictationApp/DictationApp/build/Build/Intermediates.noindex",
+      "buildProductsPath" : "/Users/justindeisler/Desktop/Developing/Projects/DictationApp/DictationApp/build/Build/Products",
+      "derivedDataPath" : "/Users/justindeisler/Desktop/Developing/Projects/DictationApp/DictationApp/build",
+      "indexDataStoreFolderPath" : "/Users/justindeisler/Desktop/Developing/Projects/DictationApp/DictationApp/build/Index.noindex/DataStore",
+      "indexEnableDataStore" : true,
+      "indexPCHPath" : "/Users/justindeisler/Desktop/Developing/Projects/DictationApp/DictationApp/build/Index.noindex/PrecompiledHeaders",
+      "pchPath" : "/Users/justindeisler/Desktop/Developing/Projects/DictationApp/DictationApp/build/Build/Intermediates.noindex/PrecompiledHeaders"
+    },
+    "configurationName" : "Release",
+    "overrides" : {
+      "commandLine" : {
+        "table" : {
+
+        }
+      },
+      "synthesized" : {
+        "table" : {
+          "ACTION" : "build",
+          "COLOR_DIAGNOSTICS" : "YES",
+          "diagnostic_message_length" : "99",
+          "ENABLE_PREVIEWS" : "NO",
+          "ENABLE_XOJIT_PREVIEWS" : "YES",
+          "ONLY_ACTIVE_ARCH" : "YES"
+        }
+      }
+    }
+  },
+  "schemeCommand" : "launch",
+  "showNonLoggedProgress" : true,
+  "useDryRun" : false,
+  "useImplicitDependencies" : true,
+  "useLegacyBuildLocations" : false,
+  "useParallelTargets" : true
+}
