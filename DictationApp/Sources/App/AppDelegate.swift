@@ -40,6 +40,9 @@ enum MenuBarIconState {
 class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, UNUserNotificationCenterDelegate {
     var statusItem: NSStatusItem?
     var settingsWindowController: NSWindowController?
+    private var historyWindowController: NSWindowController?
+    private var recentMenu: NSMenu!
+    private var currentIconState: MenuBarIconState = .idle
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         setupMenuBar()
@@ -154,6 +157,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, UNUserNotifi
             return
         }
 
+        // Save to recent transcriptions history
+        RecentTranscriptionsManager.shared.save(text)
+
         // Trigger automatic paste (OUT-03)
         Task {
             await PasteManager.shared.pasteText(text)
@@ -195,6 +201,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, UNUserNotifi
 
     func updateMenuBarIcon(state: MenuBarIconState) {
         guard let button = statusItem?.button else { return }
+        currentIconState = state
 
         let accessibilityDesc: String
         switch state {
@@ -228,8 +235,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, UNUserNotifi
             Task { @MainActor in
                 try? await Task.sleep(nanoseconds: 2_000_000_000)
                 // Only reset if still showing error (user might have started new recording)
-                if button.image?.accessibilityDescription == "Error" {
-                    updateMenuBarIcon(state: .idle)
+                if self.currentIconState == .error {
+                    self.updateMenuBarIcon(state: .idle)
                 }
             }
         }
@@ -257,8 +264,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, UNUserNotifi
         menu.addItem(NSMenuItem(title: "Check for Updates...", action: #selector(checkForUpdates), keyEquivalent: ""))
         menu.addItem(NSMenuItem.separator())
 
-        // Recent transcriptions (placeholder for Phase 3)
-        let recentMenu = NSMenu()
+        // Recent transcriptions submenu (dynamically populated in menuWillOpen)
+        recentMenu = NSMenu()
         recentMenu.addItem(NSMenuItem(title: "No recent transcriptions", action: nil, keyEquivalent: ""))
         let recentItem = NSMenuItem(title: "Recent Transcriptions", action: nil, keyEquivalent: "")
         recentItem.submenu = recentMenu
@@ -290,6 +297,20 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, UNUserNotifi
         if let launchItem = menu.item(withTitle: "Launch at Login") {
             launchItem.state = LoginItemManager.shared.isEnabled() ? .on : .off
         }
+
+        // Dynamically populate Recent Transcriptions submenu
+        recentMenu.removeAllItems()
+        if let recent = RecentTranscriptionsManager.shared.getMostRecent() {
+            // Show truncated preview of most recent transcription (disabled)
+            let preview = String(recent.text.prefix(60)) + (recent.text.count > 60 ? "..." : "")
+            let previewItem = NSMenuItem(title: preview, action: nil, keyEquivalent: "")
+            previewItem.isEnabled = false
+            recentMenu.addItem(previewItem)
+            recentMenu.addItem(NSMenuItem.separator())
+            recentMenu.addItem(NSMenuItem(title: "Show All...", action: #selector(showTranscriptionHistory), keyEquivalent: ""))
+        } else {
+            recentMenu.addItem(NSMenuItem(title: "No recent transcriptions", action: nil, keyEquivalent: ""))
+        }
     }
 
     @objc func openSettings() {
@@ -311,6 +332,27 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, UNUserNotifi
         }
 
         settingsWindowController?.showWindow(nil)
+        NSApp.activate(ignoringOtherApps: true)
+    }
+
+    @objc func showTranscriptionHistory() {
+        if historyWindowController == nil {
+            let historyView = TranscriptionHistoryView()
+            let hostingController = NSHostingController(rootView: historyView)
+
+            let window = NSWindow(contentViewController: hostingController)
+            window.title = "Transcription History"
+            window.styleMask = [.titled, .closable, .resizable]
+            window.setContentSize(NSSize(width: 500, height: 400))
+            window.center()
+
+            window.level = .floating
+            window.isMovableByWindowBackground = true
+
+            historyWindowController = NSWindowController(window: window)
+        }
+
+        historyWindowController?.showWindow(nil)
         NSApp.activate(ignoringOtherApps: true)
     }
 

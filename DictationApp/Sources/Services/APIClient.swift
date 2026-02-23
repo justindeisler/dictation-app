@@ -48,17 +48,15 @@ final class APIClient: Sendable {
     private let maxFileSize: Int64 = 25_000_000
 
     private init() {
-        // Short timeout for validation requests
-        let validationConfig = URLSessionConfiguration.default
-        validationConfig.timeoutIntervalForRequest = 10
-        validationConfig.timeoutIntervalForResource = 10
-        session = URLSession(configuration: validationConfig)
+        session = Self.makeSession(timeout: 10)               // Validation requests
+        transcriptionSession = Self.makeSession(timeout: 60)  // Audio processing
+    }
 
-        // Longer timeout for transcription (audio processing takes time)
-        let transcriptionConfig = URLSessionConfiguration.default
-        transcriptionConfig.timeoutIntervalForRequest = 60
-        transcriptionConfig.timeoutIntervalForResource = 60
-        transcriptionSession = URLSession(configuration: transcriptionConfig)
+    private static func makeSession(timeout: TimeInterval) -> URLSession {
+        let config = URLSessionConfiguration.default
+        config.timeoutIntervalForRequest = timeout
+        config.timeoutIntervalForResource = timeout
+        return URLSession(configuration: config)
     }
 
     /// Validates API key by calling the models endpoint (fast, free)
