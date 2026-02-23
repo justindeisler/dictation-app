@@ -1,6 +1,6 @@
 import Foundation
 import AppKit
-import UserNotifications
+@preconcurrency import UserNotifications
 
 // MARK: - Paste Manager
 
@@ -9,6 +9,9 @@ import UserNotifications
 @MainActor
 final class PasteManager {
     static let shared = PasteManager()
+
+    /// Virtual key code for 'V' key (Carbon kVK_ANSI_V = 0x09)
+    private let kVKeyV: CGKeyCode = 0x09
 
     private init() {}
 
@@ -76,9 +79,8 @@ final class PasteManager {
             return false
         }
 
-        // Virtual key code 9 = V key
-        guard let keyDown = CGEvent(keyboardEventSource: source, virtualKey: 9, keyDown: true),
-              let keyUp = CGEvent(keyboardEventSource: source, virtualKey: 9, keyDown: false) else {
+        guard let keyDown = CGEvent(keyboardEventSource: source, virtualKey: kVKeyV, keyDown: true),
+              let keyUp = CGEvent(keyboardEventSource: source, virtualKey: kVKeyV, keyDown: false) else {
             print("Failed to create CGEvent for paste")
             return false
         }
@@ -106,14 +108,16 @@ final class PasteManager {
             &focusedElement
         )
 
-        guard error == .success, let element = focusedElement else {
+        guard error == .success, focusedElement != nil else {
             return false
         }
+        // swiftlint:disable:next force_cast — AXUIElement is a CF type; cast always succeeds after nil check
+        let element = focusedElement as! AXUIElement
 
         // Get role attribute of focused element
         var role: AnyObject?
         let roleError = AXUIElementCopyAttributeValue(
-            element as! AXUIElement,
+            element,
             kAXRoleAttribute as CFString,
             &role
         )
@@ -162,10 +166,10 @@ final class PasteManager {
             systemWide,
             kAXFocusedUIElementAttribute as CFString,
             &focusedElement
-        ) == .success else {
+        ) == .success, focusedElement != nil else {
             return nil
         }
-
+        // swiftlint:disable:next force_cast — CF type cast always succeeds after nil check
         let element = focusedElement as! AXUIElement
 
         // Get selected text range (cursor position)
@@ -179,7 +183,9 @@ final class PasteManager {
         }
 
         var range = CFRange()
-        guard AXValueGetValue(rangeValue as! AXValue, .cfRange, &range) else {
+        guard rangeValue != nil,
+              // swiftlint:disable:next force_cast — AXValue is a CF type; cast always succeeds after nil check
+              AXValueGetValue(rangeValue as! AXValue, .cfRange, &range) else {
             return nil
         }
 
