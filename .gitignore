@@ -1,0 +1,42 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Xcode
+build/
+DerivedData/
+*.xcuserstate
+*.xcuserdatad/
+xcuserdata/
+*.xccheckout
+*.moved-aside
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# Swift Package Manager
+.build/
+Packages/
+Package.pins
+Package.resolved
+!DictationApp/DictationApp.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved
+
+# CocoaPods (not used, but defensive)
+Pods/
+
+# Secrets (defensive)
+.env
+.env.*
+*.key
+*.pem
+*.p12
+*.p8
+
+# AI tool configs
+.claude/
+.serena/
+
+# Internal dev planning
+.planning/
