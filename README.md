@@ -17,28 +17,30 @@ A lightweight macOS menu bar app that turns speech into text using Groq's Whispe
 ## Requirements
 
 - macOS 14.0 (Sonoma) or later
-- Xcode 15.4+ with Swift 6.0
 - A free [Groq API key](https://console.groq.com/keys)
 
 ## Quick Start
 
-1. **Clone the repo**
-   ```bash
-   git clone https://github.com/YOUR_USERNAME/DictationApp.git
-   cd DictationApp/DictationApp
-   ```
+### Download (no Xcode needed)
 
-2. **Open in Xcode**
-   ```bash
-   open DictationApp.xcodeproj
-   ```
+1. Download **DictationApp-macOS.zip** from the [latest release](https://github.com/justindeisler/DictationApp/releases/latest)
+2. Unzip and drag **DictationApp.app** to your Applications folder
+3. Right-click the app and choose **Open** (required once for Gatekeeper)
+4. Click the menu bar icon, open **Settings**, and paste your [Groq API key](https://console.groq.com/keys)
 
-3. **Update the signing team**
-   In Xcode, select the `DictationApp` target → Signing & Capabilities → change Team to your own Apple Developer account (free account works).
+### Build from Source
 
-4. **Build & Run** (Cmd+R)
+Requires Xcode 15.4+ with Swift 6.0.
 
-The app appears in your menu bar. Click the icon and go to **Settings** to enter your Groq API key.
+```bash
+git clone https://github.com/justindeisler/DictationApp.git
+cd DictationApp
+./install.sh
+```
+
+The script builds the app with ad-hoc signing and copies it to `/Applications`.
+
+> **New to the command line?** See [SETUP.md](SETUP.md) for a detailed beginner-friendly guide with troubleshooting.
 
 ## Getting a Groq API Key
 
@@ -112,7 +114,7 @@ Both dependencies are managed via Swift Package Manager and resolve automaticall
 
 ## Note on Team ID
 
-The project file (`project.pbxproj`) contains a Team ID (`YR4WG4W3YG`). This is the original developer's Apple signing identity — it's standard for Xcode projects and not a security concern. You'll replace it with your own Team ID in step 3 of Quick Start.
+The project file (`project.pbxproj`) contains a Team ID (`YR4WG4W3YG`). This is the original developer's Apple signing identity — it's standard for Xcode projects and not a security concern. The install script bypasses this with ad-hoc signing, so you don't need to change it. If you build manually in Xcode, replace it with your own Team ID.
 
 ## License
 

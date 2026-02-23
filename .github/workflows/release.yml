@@ -1,0 +1,47 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Resolve SPM dependencies
+        run: |
+          xcodebuild -resolvePackageDependencies \
+            -project DictationApp/DictationApp.xcodeproj \
+            -scheme DictationApp
+
+      - name: Build
+        run: |
+          xcodebuild \
+            -project DictationApp/DictationApp.xcodeproj \
+            -scheme DictationApp \
+            -configuration Release \
+            CODE_SIGN_IDENTITY="-" \
+            DEVELOPMENT_TEAM="" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO \
+            ONLY_ACTIVE_ARCH=NO \
+            -derivedDataPath build \
+            -quiet
+
+      - name: Zip app
+        run: |
+          cd build/Build/Products/Release
+          zip -r -y "$GITHUB_WORKSPACE/DictationApp-macOS.zip" DictationApp.app
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: DictationApp-macOS.zip
+          generate_release_notes: true
