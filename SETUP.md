@@ -19,7 +19,7 @@ A step-by-step guide to install DictationApp on your Mac. No programming experie
 
 No Xcode or developer tools needed.
 
-1. Go to the [latest release](https://github.com/justindeisler/DictationApp/releases/latest)
+1. Go to the [latest release](https://github.com/justindeisler/dictation-app/releases/latest)
 2. Download **DictationApp-macOS.zip**
 3. Open your Downloads folder and double-click the ZIP to unzip it
 4. Drag **DictationApp.app** into your **Applications** folder
@@ -32,8 +32,8 @@ This requires **Xcode** (free from the Mac App Store, ~7 GB download).
 
 1. Install Xcode from the **Mac App Store**, then open it once to accept the license agreement
 2. Download the source code:
-   - **ZIP:** Go to the [GitHub page](https://github.com/justindeisler/DictationApp), click **Code > Download ZIP**, and unzip it
-   - **Git:** `git clone https://github.com/justindeisler/DictationApp.git`
+   - **ZIP:** Go to the [GitHub page](https://github.com/justindeisler/dictation-app), click **Code > Download ZIP**, and unzip it
+   - **Git:** `git clone https://github.com/justindeisler/dictation-app.git`
 3. Open **Terminal** (Cmd+Space, type "Terminal", press Enter)
 4. Navigate to the DictationApp folder. Type `cd ` (with a space), then **drag the folder from Finder into Terminal**. Press **Enter**. Or type it manually:
    ```bash
@@ -172,7 +172,7 @@ chmod +x install.sh
 
 ## Updating DictationApp
 
-**Pre-built download:** Go to the [releases page](https://github.com/justindeisler/DictationApp/releases/latest), download the latest ZIP, and replace the app in your Applications folder.
+**Pre-built download:** Go to the [releases page](https://github.com/justindeisler/dictation-app/releases/latest), download the latest ZIP, and replace the app in your Applications folder.
 
 **Built from source:** Download the latest code (re-download the ZIP or `git pull`) and run `./install.sh` again — it will replace the old version.
 

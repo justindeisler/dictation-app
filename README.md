@@ -23,7 +23,7 @@ A lightweight macOS menu bar app that turns speech into text using Groq's Whispe
 
 ### Download (no Xcode needed)
 
-1. Download **DictationApp-macOS.zip** from the [latest release](https://github.com/justindeisler/DictationApp/releases/latest)
+1. Download **DictationApp-macOS.zip** from the [latest release](https://github.com/justindeisler/dictation-app/releases/latest)
 2. Unzip and drag **DictationApp.app** to your Applications folder
 3. Right-click the app and choose **Open** (required once for Gatekeeper)
 4. Click the menu bar icon, open **Settings**, and paste your [Groq API key](https://console.groq.com/keys)
@@ -33,7 +33,7 @@ A lightweight macOS menu bar app that turns speech into text using Groq's Whispe
 Requires Xcode 15.4+ with Swift 6.0.
 
 ```bash
-git clone https://github.com/justindeisler/DictationApp.git
+git clone https://github.com/justindeisler/dictation-app.git
 cd DictationApp
 ./install.sh
 ```
