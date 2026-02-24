@@ -8,11 +8,16 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 # Full build + install to /Applications (ad-hoc signed, no Apple Developer account needed)
 ./install.sh
 
-# Build only (Release)
+# Build only (Release, unsigned)
 xcodebuild -project DictationApp/DictationApp.xcodeproj -scheme DictationApp \
-  -configuration Release CODE_SIGN_IDENTITY="-" DEVELOPMENT_TEAM="" \
+  -configuration Release CODE_SIGN_IDENTITY="" \
   CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO ONLY_ACTIVE_ARCH=NO \
   -derivedDataPath build -quiet
+
+# Ad-hoc sign with entitlements (required for microphone + accessibility)
+xattr -cr build/Build/Products/Release/DictationApp.app
+codesign --force --sign - --entitlements DictationApp/DictationApp.entitlements \
+  --deep build/Build/Products/Release/DictationApp.app
 
 # Resolve SPM dependencies separately
 xcodebuild -resolvePackageDependencies \

@@ -68,8 +68,7 @@ xcodebuild \
     -project "$PROJECT_DIR/$APP_NAME.xcodeproj" \
     -scheme "$APP_NAME" \
     -configuration Release \
-    CODE_SIGN_IDENTITY="-" \
-    DEVELOPMENT_TEAM="" \
+    CODE_SIGN_IDENTITY="" \
     CODE_SIGNING_REQUIRED=NO \
     CODE_SIGNING_ALLOWED=NO \
     ONLY_ACTIVE_ARCH=NO \
@@ -83,6 +82,12 @@ if [ ! -d "$BUILD_APP" ]; then
 fi
 
 success "Build successful!"
+
+# ── Ad-hoc sign with entitlements ────────────
+info "Signing with entitlements..."
+xattr -cr "$BUILD_APP"
+codesign --force --sign - --entitlements "$PROJECT_DIR/$APP_NAME.entitlements" --deep "$BUILD_APP"
+success "Signed!"
 
 # ── Copy to /Applications ─────────────────────
 info "Installing to /Applications..."
