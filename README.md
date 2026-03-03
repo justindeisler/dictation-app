@@ -34,7 +34,7 @@ Requires Xcode 15.4+ with Swift 6.0.
 
 ```bash
 git clone https://github.com/justindeisler/dictation-app.git
-cd DictationApp
+cd dictation-app
 ./install.sh
 ```
 
