@@ -22,9 +22,9 @@
 		E40000311234567890123456 /* TranscriptionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40000321234567890123456 /* TranscriptionManager.swift */; };
 		E40000501234567890123456 /* NotificationThrottler.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40000511234567890123456 /* NotificationThrottler.swift */; };
 		E40000521234567890123456 /* ErrorNotifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40000531234567890123456 /* ErrorNotifier.swift */; };
-		E46EC0343501722850571617 /* PasteManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C2E9A89385016420761957 /* PasteManager.swift */; };
 		E40000601234567890123456 /* RecentTranscriptionsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40000611234567890123456 /* RecentTranscriptionsManager.swift */; };
 		E40000621234567890123456 /* TranscriptionHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40000631234567890123456 /* TranscriptionHistoryView.swift */; };
+		E46EC0343501722850571617 /* PasteManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C2E9A89385016420761957 /* PasteManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,9 +44,9 @@
 		E40000321234567890123456 /* TranscriptionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranscriptionManager.swift; sourceTree = "<group>"; };
 		E40000511234567890123456 /* NotificationThrottler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationThrottler.swift; sourceTree = "<group>"; };
 		E40000531234567890123456 /* ErrorNotifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorNotifier.swift; sourceTree = "<group>"; };
-		E4C2E9A89385016420761957 /* PasteManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasteManager.swift; sourceTree = "<group>"; };
 		E40000611234567890123456 /* RecentTranscriptionsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentTranscriptionsManager.swift; sourceTree = "<group>"; };
 		E40000631234567890123456 /* TranscriptionHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranscriptionHistoryView.swift; sourceTree = "<group>"; };
+		E4C2E9A89385016420761957 /* PasteManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasteManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */

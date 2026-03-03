@@ -1,4 +1,7 @@
 import Foundation
+import os
+
+private let logger = Logger(subsystem: "com.dictationapp.DictationApp", category: "TranscriptionManager")
 
 // MARK: - Transcription Notifications
 
@@ -19,6 +22,10 @@ final class TranscriptionManager {
 
     private init() {}
 
+    /// Minimum valid m4a file size: AAC container has overhead, so minimum meaningful recording
+    /// is larger than the old WAV minimum. ~4KB covers AAC container + ~0.1s of audio at 32kbps.
+    private let minimumFileSize: Int64 = 4_000
+
     /// Process a recorded audio file and transcribe it
     /// - Parameter audioURL: URL to the recorded WAV file
     /// - Returns: Transcribed text on success, nil on failure
@@ -29,6 +36,35 @@ final class TranscriptionManager {
         let languagePreference = UserDefaults.standard.string(forKey: "transcriptionLanguage") ?? "auto"
         let language: String? = languagePreference == "auto" ? nil : languagePreference
 
+        // Validate recording file before sending to API
+        let fileManager = FileManager.default
+        guard fileManager.fileExists(atPath: audioURL.path) else {
+            logger.error("Recording file missing: \(audioURL.lastPathComponent, privacy: .public)")
+            NotificationCenter.default.post(
+                name: .transcriptionDidFail,
+                object: nil,
+                userInfo: ["error": APIError.invalidResponse]
+            )
+            return nil
+        }
+
+        if let attrs = try? fileManager.attributesOfItem(atPath: audioURL.path),
+           let fileSize = attrs[.size] as? Int64 {
+            // AAC at 32kbps = 4000 bytes/s for duration estimate (was 32000 for PCM WAV)
+            let durationEstimate = Double(fileSize) / 4000.0
+            logger.info("Recording file: \(audioURL.lastPathComponent, privacy: .public), size=\(fileSize) bytes, ~\(String(format: "%.1f", durationEstimate), privacy: .public)s")
+
+            if fileSize < minimumFileSize {
+                logger.warning("Recording too short (\(fileSize) bytes < \(self.minimumFileSize) minimum)")
+                NotificationCenter.default.post(
+                    name: .transcriptionDidFail,
+                    object: nil,
+                    userInfo: ["error": APIError.serverError(0, message: "Recording too short. Hold the hotkey longer.")]
+                )
+                return nil
+            }
+        }
+
         // Post notification that transcription is starting (for menu bar icon - ERR-04)
         NotificationCenter.default.post(
             name: .transcriptionWillStart,
@@ -36,9 +72,9 @@ final class TranscriptionManager {
         )
 
         do {
-            print("Starting transcription for: \(audioURL.lastPathComponent)")
+            logger.info("Starting transcription for: \(audioURL.lastPathComponent, privacy: .public)")
             let result = try await APIClient.shared.transcribe(audioURL: audioURL, language: language)
-            print("Transcription complete: \(result.text)")
+            logger.info("Transcription complete: \(result.text.prefix(80), privacy: .public)")
 
             // Post notification for Phase 4 paste integration
             NotificationCenter.default.post(
@@ -48,7 +84,7 @@ final class TranscriptionManager {
 
             return result.text
         } catch let error as APIError {
-            print("Transcription failed: \(error.userMessage)")
+            logger.error("Transcription failed: \(error.userMessage, privacy: .public)")
 
             // Post error with full context for ErrorNotifier (ERR-01, ERR-02, ERR-04)
             NotificationCenter.default.post(
@@ -59,7 +95,7 @@ final class TranscriptionManager {
             return nil
         } catch let error as URLError {
             // Handle URLError specifically for better network error messages (ERR-04)
-            print("Network error during transcription: \(error.localizedDescription)")
+            logger.error("Network error during transcription: \(error.localizedDescription, privacy: .public)")
 
             let apiError: APIError
             switch error.code {
@@ -78,7 +114,7 @@ final class TranscriptionManager {
             )
             return nil
         } catch {
-            print("Transcription failed: \(error.localizedDescription)")
+            logger.error("Transcription failed: \(error.localizedDescription, privacy: .public)")
 
             NotificationCenter.default.post(
                 name: .transcriptionDidFail,

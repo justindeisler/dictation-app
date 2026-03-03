@@ -1,5 +1,5 @@
 import Foundation
-import AVFoundation
+import AVFAudio
 import ApplicationServices
 import AppKit
 
@@ -21,13 +21,12 @@ final class PermissionManager {
 
     /// Check current microphone permission status
     func checkMicrophonePermission() -> PermissionStatus {
-        let status = AVCaptureDevice.authorizationStatus(for: .audio)
-        switch status {
-        case .authorized:
+        switch AVAudioApplication.shared.recordPermission {
+        case .granted:
             return .granted
-        case .denied, .restricted:
+        case .denied:
             return .denied
-        case .notDetermined:
+        case .undetermined:
             return .notDetermined
         @unknown default:
             return .notDetermined
@@ -37,7 +36,11 @@ final class PermissionManager {
     /// Request microphone permission from user
     /// - Returns: true if permission was granted
     func requestMicrophonePermission() async -> Bool {
-        await AVCaptureDevice.requestAccess(for: .audio)
+        await withCheckedContinuation { continuation in
+            AVAudioApplication.requestRecordPermission { granted in
+                continuation.resume(returning: granted)
+            }
+        }
     }
 
     /// Show guidance alert when microphone permission is denied

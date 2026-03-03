@@ -1,6 +1,9 @@
 import Foundation
 import AppKit
+import os
 @preconcurrency import UserNotifications
+
+private let logger = Logger(subsystem: "com.dictationapp.DictationApp", category: "PasteManager")
 
 // MARK: - Paste Manager
 
@@ -12,6 +15,9 @@ final class PasteManager {
 
     /// Virtual key code for 'V' key (Carbon kVK_ANSI_V = 0x09)
     private let kVKeyV: CGKeyCode = 0x09
+
+    /// Track whether we've already prompted for accessibility this session
+    private var hasPromptedForAccessibility = false
 
     private init() {}
 
@@ -25,7 +31,7 @@ final class PasteManager {
 
         // Skip empty transcriptions silently (user decision)
         guard !trimmedText.isEmpty else {
-            print("Empty transcription - skipping paste")
+            logger.info("Empty transcription - skipping paste")
             return
         }
 
@@ -34,7 +40,7 @@ final class PasteManager {
 
         // 3. Write to clipboard FIRST - this always works as fallback
         writeToClipboard(text: finalText)
-        print("Text copied to clipboard: \(finalText.prefix(50))...")
+        logger.info("Text copied to clipboard: \(finalText.prefix(50), privacy: .public)...")
 
         // 4. Wait safe delay (user decision: 100-200ms range, using 150ms)
         try? await Task.sleep(nanoseconds: 150_000_000)
@@ -43,11 +49,14 @@ final class PasteManager {
         let pasteSuccess = simulatePaste()
 
         if pasteSuccess {
-            print("Text pasted successfully: \(trimmedText.prefix(50))...")
+            logger.info("Text pasted successfully")
         } else {
-            // Paste simulation failed but text is on clipboard
-            print("Paste simulation failed - text is on clipboard, use Cmd+V to paste manually")
-            await showNotificationFallback(text: trimmedText)
+            // Text is already on clipboard — user can manually Cmd+V.
+            // Do NOT show a notification fallback with the transcription text; that is
+            // confusing UX (user expects text in their app, not a notification popup).
+            // The accessibility guidance alert (shown once per session by simulatePaste)
+            // already explains what to do. Log only.
+            logger.warning("Paste simulation failed - text is on clipboard, user can Cmd+V manually")
         }
     }
 
@@ -66,22 +75,27 @@ final class PasteManager {
     /// Simulate Cmd+V keystroke using CGEvent
     /// - Returns: true if event was posted successfully
     private func simulatePaste() -> Bool {
-        // Verify accessibility permission (defensive check)
+        // Verify accessibility permission — show guidance alert once per session if missing.
+        // Do NOT call requestAccessibilityPermission() (which silently opens System Settings
+        // via AXIsProcessTrustedWithOptions) — that is the cause of the repeated re-prompt.
+        // Instead, show a clear one-time guidance alert so the user understands what to do.
         guard AXIsProcessTrusted() else {
-            print("Accessibility permission not granted - cannot simulate paste")
-            // Show guidance to help user enable accessibility
-            PermissionManager.shared.showAccessibilityPermissionGuidance()
+            logger.warning("Accessibility permission not granted - cannot simulate paste")
+            if !hasPromptedForAccessibility {
+                hasPromptedForAccessibility = true
+                PermissionManager.shared.showAccessibilityPermissionGuidance()
+            }
             return false
         }
 
         guard let source = CGEventSource(stateID: .hidSystemState) else {
-            print("Failed to create CGEventSource")
+            logger.error("Failed to create CGEventSource")
             return false
         }
 
         guard let keyDown = CGEvent(keyboardEventSource: source, virtualKey: kVKeyV, keyDown: true),
               let keyUp = CGEvent(keyboardEventSource: source, virtualKey: kVKeyV, keyDown: false) else {
-            print("Failed to create CGEvent for paste")
+            logger.error("Failed to create CGEvent for paste")
             return false
         }
 
@@ -219,8 +233,7 @@ final class PasteManager {
         // Check authorization status first
         let settings = await center.notificationSettings()
         guard settings.authorizationStatus == .authorized else {
-            print("Notification permission not granted (status: \(settings.authorizationStatus.rawValue))")
-            print("Text is on clipboard - use Cmd+V to paste manually")
+            logger.warning("Notification permission not granted (status: \(settings.authorizationStatus.rawValue))")
 
             // Show alert as fallback since notifications aren't available
             await showAlertFallback(text: text)
@@ -241,9 +254,9 @@ final class PasteManager {
 
         do {
             try await center.add(request)
-            print("Notification shown with transcription")
+            logger.info("Notification shown with transcription")
         } catch {
-            print("Failed to show notification: \(error)")
+            logger.error("Failed to show notification: \(error.localizedDescription, privacy: .public)")
             await showAlertFallback(text: text)
         }
     }

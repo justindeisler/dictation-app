@@ -1,6 +1,6 @@
 import AppKit
 import SwiftUI
-import UserNotifications
+@preconcurrency import UserNotifications
 
 // MARK: - Menu Bar Icon State
 
@@ -49,10 +49,24 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, UNUserNotifi
         setupRecordingStateObservers()
         setupNotifications()              // NEW: Notification infrastructure
         setupTranscriptionObservers()     // NEW: Wire transcription to paste
+        setupPermissions()                // Request permissions at launch
         HotkeyManager.shared.setupHotkey()
+    }
 
-        // Check and request accessibility permission at launch (PRM-02)
-        // Required for Phase 4 paste functionality
+    // MARK: - Permission Setup
+
+    /// Check microphone status and request accessibility at launch.
+    /// Microphone: only CHECK status here — HotkeyManager is the sole requester (no race condition).
+    /// Accessibility: request once at launch for Cmd+V paste simulation.
+    private func setupPermissions() {
+        // Microphone: only CHECK status, never request here.
+        // HotkeyManager.handleHotkeyPressed() is the sole requester (no race condition).
+        let micStatus = PermissionManager.shared.checkMicrophonePermission()
+        if micStatus == .granted {
+            HotkeyManager.shared.microphonePermissionGranted = true
+        }
+
+        // Accessibility: request once at launch for Cmd+V paste simulation.
         if !PermissionManager.shared.checkAccessibilityPermission() {
             PermissionManager.shared.requestAccessibilityPermission()
         }
@@ -73,9 +87,16 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, UNUserNotifi
             name: .recordingDidStop,
             object: nil
         )
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleRecordingAutoStopped),
+            name: .recordingDidAutoStop,
+            object: nil
+        )
     }
 
     @objc func handleRecordingStarted() {
+        statusItem?.button?.toolTip = "Recording..."
         updateMenuBarIcon(state: .recording)
     }
 
@@ -84,6 +105,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, UNUserNotifi
         // Recording stopped means we're transitioning to processing state
         // The transcriptionWillStart notification will set processing
         // The transcriptionDidComplete/transcriptionDidFail will reset to idle/error
+    }
+
+    @objc func handleRecordingAutoStopped(_ notification: Notification) {
+        // Recording hit the 10-minute safety limit
+        updateMenuBarIcon(state: .processing)
+        statusItem?.button?.toolTip = "Recording stopped at 10-minute limit. Transcribing..."
     }
 
     // MARK: - Notification Setup
@@ -111,12 +138,17 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, UNUserNotifi
         // Register error notification categories (ERR-01, ERR-02)
         ErrorNotifier.shared.setupNotificationCategories()
 
-        // Request notification authorization
-        center.requestAuthorization(options: [.alert, .sound]) { granted, error in
-            if let error = error {
-                print("Notification authorization error: \(error)")
-            } else if granted {
-                print("Notification permission granted")
+        // Check notification authorization status — only request if not yet determined.
+        // Avoids showing a notification permission modal on every launch when already granted/denied.
+        center.getNotificationSettings { settings in
+            if settings.authorizationStatus == .notDetermined {
+                center.requestAuthorization(options: [.alert, .sound]) { granted, error in
+                    if let error = error {
+                        print("Notification authorization error: \(error)")
+                    } else if granted {
+                        print("Notification permission granted")
+                    }
+                }
             }
         }
     }
@@ -150,6 +182,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, UNUserNotifi
 
     @objc func handleTranscriptionComplete(_ notification: Notification) {
         // Reset icon to idle on successful transcription (ERR-04)
+        statusItem?.button?.toolTip = "DictationApp"
         updateMenuBarIcon(state: .idle)
 
         guard let text = notification.object as? String else {
@@ -191,6 +224,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, UNUserNotifi
             )
         }
 
+        // Set tooltip so error message is visible on hover
+        statusItem?.button?.toolTip = "Error: \(error.localizedDescription)"
+
         // Route to ErrorNotifier for user notification with throttling
         Task {
             await ErrorNotifier.shared.showTranscriptionError(error)
@@ -230,12 +266,13 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, UNUserNotifi
             }
         }
 
-        // Auto-reset error state to idle after 2 seconds (ERR-04)
+        // Auto-reset error state to idle after 5 seconds (ERR-04)
         if state == .error {
             Task { @MainActor in
-                try? await Task.sleep(nanoseconds: 2_000_000_000)
+                try? await Task.sleep(nanoseconds: 5_000_000_000)
                 // Only reset if still showing error (user might have started new recording)
                 if self.currentIconState == .error {
+                    self.statusItem?.button?.toolTip = "DictationApp"
                     self.updateMenuBarIcon(state: .idle)
                 }
             }

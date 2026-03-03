@@ -1,4 +1,5 @@
 import Foundation
+import AppKit
 @preconcurrency import UserNotifications
 
 /// Error notification category identifiers
@@ -97,6 +98,16 @@ final class ErrorNotifier {
             message = error.localizedDescription
         }
 
+        // Check notification authorization before attempting UNUserNotification
+        let center = UNUserNotificationCenter.current()
+        let settings = await center.notificationSettings()
+
+        guard settings.authorizationStatus == .authorized else {
+            // Notifications not authorized — fall back to NSAlert
+            showErrorAlert(title: title, message: message)
+            return
+        }
+
         // Create and show notification
         let content = UNMutableNotificationContent()
         content.title = title
@@ -111,10 +122,23 @@ final class ErrorNotifier {
         )
 
         do {
-            try await UNUserNotificationCenter.current().add(request)
+            try await center.add(request)
             print("Error notification shown: \(title) - \(message)")
         } catch {
-            print("Failed to show error notification: \(error)")
+            print("Failed to show error notification: \(error). Falling back to alert.")
+            showErrorAlert(title: title, message: message)
         }
+    }
+
+    // MARK: - Alert Fallback
+
+    /// Show an NSAlert as fallback when system notifications aren't available
+    private func showErrorAlert(title: String, message: String) {
+        let alert = NSAlert()
+        alert.messageText = title
+        alert.informativeText = message
+        alert.alertStyle = .warning
+        alert.addButton(withTitle: "OK")
+        alert.runModal()
     }
 }
