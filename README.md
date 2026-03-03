@@ -1,6 +1,7 @@
 # DictationApp
 
 A lightweight macOS menu bar app that turns speech into text using Groq's Whisper API. Press a hotkey, speak, and the transcription is automatically pasted into whatever app you're working in.
+Works great with groq's free tier ai speech-to-text model for a single person. 
 
 ![macOS 14+](https://img.shields.io/badge/macOS-14%2B-blue) ![Swift 6](https://img.shields.io/badge/Swift-6.0-orange) ![License: MIT](https://img.shields.io/badge/License-MIT-green)
 
