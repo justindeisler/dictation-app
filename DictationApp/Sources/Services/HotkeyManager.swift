@@ -81,8 +81,10 @@ final class HotkeyManager {
         let permission = PermissionManager.shared
 
         if recorder.isRecording {
-            // Stop recording (REC-02)
-            if let recordingURL = recorder.stopRecording() {
+            // Stop recording (REC-02). stopRecording() is async — it awaits the AAC
+            // encoder's finalize delegate so we never hand a half-flushed file to
+            // the transcription pipeline.
+            if let recordingURL = await recorder.stopRecording() {
                 logger.info("Recording stopped. File saved to: \(recordingURL.path)")
                 NotificationCenter.default.post(
                     name: .recordingDidStop,
@@ -94,6 +96,11 @@ final class HotkeyManager {
                     await TranscriptionManager.shared.handleRecordingCompletion(audioURL: recordingURL)
                 }
             }
+        } else if recorder.isFinalizing {
+            // Hotkey pressed during the AAC flush window of a previous recording.
+            // Ignore — starting a new recording here would orphan the in-flight one.
+            logger.info("Hotkey ignored — previous recording is still finalizing")
+            return
         } else {
             // Check API key FIRST before even checking permissions (ERR-03)
             // No point recording if we can't transcribe

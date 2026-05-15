@@ -66,12 +66,19 @@ final class APIClient: Sendable {
     }
 
     /// Transcription session with generous timeouts for long recordings on Groq free tier.
-    /// - requestTimeout (300s): detects stalled connections (no bytes for 5 min)
-    /// - resourceTimeout (600s): total time budget for upload + Groq inference + download
+    /// - requestTimeout (300s): detects stalled connections (no bytes for 5 min — accounts for
+    ///   slow upstream connections sending a 2-3 MB body without any response yet).
+    /// - resourceTimeout (900s / 15 min): total time budget for upload + Groq inference + download.
+    ///   AudioRecorder caps recordings at 600s. At 32 kbps AAC that's ~2.4 MB. Worst case:
+    ///   60s upload on poor wifi + 90s Groq inference + buffer → comfortable headroom up to 15 min.
+    ///   Setting allowsExpensiveNetworkAccess so cellular hotspot tethering still works.
     private static func makeTranscriptionSession() -> URLSession {
         let config = URLSessionConfiguration.default
         config.timeoutIntervalForRequest = 300
-        config.timeoutIntervalForResource = 600
+        config.timeoutIntervalForResource = 900
+        config.waitsForConnectivity = true              // queue requests when offline; resume when network returns
+        config.allowsExpensiveNetworkAccess = true
+        config.allowsConstrainedNetworkAccess = true
         return URLSession(configuration: config)
     }
 
@@ -114,8 +121,10 @@ final class APIClient: Sendable {
     /// - Parameters:
     ///   - audioURL: URL to the WAV audio file
     ///   - language: Optional language code (e.g., "en", "de"). nil for auto-detection.
+    ///   - prompt: Optional context prompt (≤224 tokens) to bias vocabulary, punctuation,
+    ///             and homophone resolution. Crucial for technical terms like "Claude" vs "Cloud".
     /// - Returns: TranscriptionResult containing the transcribed text
-    func transcribe(audioURL: URL, language: String?) async throws -> TranscriptionResult {
+    func transcribe(audioURL: URL, language: String?, prompt: String? = nil) async throws -> TranscriptionResult {
         // Validate file exists and check size
         let fileManager = FileManager.default
         guard fileManager.fileExists(atPath: audioURL.path) else {
@@ -125,7 +134,8 @@ final class APIClient: Sendable {
 
         let attributes = try fileManager.attributesOfItem(atPath: audioURL.path)
         let fileSize = attributes[.size] as? Int64 ?? 0
-        logger.info("Transcribing \(audioURL.lastPathComponent, privacy: .public): \(fileSize) bytes")
+        let fileSizeKB = Double(fileSize) / 1024.0
+        logger.info("Transcribing \(audioURL.lastPathComponent, privacy: .public): \(fileSize) bytes (\(String(format: "%.1f", fileSizeKB)) KB)")
 
         guard fileSize <= maxFileSize else {
             logger.error("File too large: \(fileSize) > \(self.maxFileSize)")
@@ -176,43 +186,82 @@ final class APIClient: Sendable {
             body.append("\(language)\r\n")
         }
 
+        // Add prompt field if specified. Whisper uses this as vocabulary/style context:
+        // biases recognition toward listed terms ("Claude" not "Cloud") and toward the
+        // prompt's punctuation/capitalization style.
+        if let prompt = prompt, !prompt.isEmpty {
+            body.append("--\(boundary)\r\n")
+            body.append("Content-Disposition: form-data; name=\"prompt\"\r\n\r\n")
+            body.append("\(prompt)\r\n")
+        }
+
         // End boundary
         body.append("--\(boundary)--\r\n")
 
         request.httpBody = body
+        let bodyKB = Double(body.count) / 1024.0
 
-        // Send request with retry logic for transient network errors
-        logger.info("Sending transcription request to Groq API")
+        // Send request with retry logic for transient network errors AND retryable HTTP
+        // statuses (429 with Retry-After honoring, 5xx with exponential backoff).
+        // Without HTTP-level retry, a single Groq blip surfaces as a user-facing failure.
+        logger.info("Sending transcription request to Groq API (body \(String(format: "%.1f", bodyKB)) KB)")
         var data: Data = Data()
         var response: URLResponse = URLResponse()
         let maxRetries = 2
 
         var lastError: Error?
         var succeeded = false
+        var nextDelaySeconds: UInt64 = 0
 
         for attempt in 0...maxRetries {
             if attempt > 0 {
-                let delay = UInt64(attempt) * 1_000_000_000  // 1s, 2s
-                logger.info("Retrying transcription (attempt \(attempt + 1)/\(maxRetries + 1)) after \(attempt)s delay")
-                try await Task.sleep(nanoseconds: delay)
+                logger.info("Retrying transcription (attempt \(attempt + 1)/\(maxRetries + 1)) after \(nextDelaySeconds)s delay")
+                try await Task.sleep(nanoseconds: nextDelaySeconds * 1_000_000_000)
             }
 
+            // Wall-clock timing for diagnosis of long-recording slowness.
+            let attemptStart = Date()
             do {
                 (data, response) = try await transcriptionSession.data(for: request)
+                let elapsed = Date().timeIntervalSince(attemptStart)
+                logger.info("Transcription request completed in \(String(format: "%.2f", elapsed))s (attempt \(attempt + 1))")
+            } catch let error as URLError where Self.isRetryable(error) {
+                let elapsed = Date().timeIntervalSince(attemptStart)
+                logger.warning("Transient network error after \(String(format: "%.2f", elapsed))s (attempt \(attempt + 1)/\(maxRetries + 1), code=\(error.code.rawValue)): \(error.localizedDescription, privacy: .public)")
+                lastError = error
+                nextDelaySeconds = Self.networkBackoffSeconds(attempt: attempt)
+                continue
+            } catch let error as URLError where error.code == .timedOut {
+                let elapsed = Date().timeIntervalSince(attemptStart)
+                logger.error("Transcription request timed out after \(String(format: "%.2f", elapsed))s")
+                throw APIError.timeout
+            } catch {
+                let elapsed = Date().timeIntervalSince(attemptStart)
+                logger.error("Network error after \(String(format: "%.2f", elapsed))s: \(error.localizedDescription, privacy: .public)")
+                throw APIError.networkError(error)
+            }
+
+            // Got a response — inspect status to decide on HTTP-level retry.
+            guard let httpResponse = response as? HTTPURLResponse else {
+                // Non-HTTP response — fall through; status switch below will throw invalidResponse.
                 lastError = nil
                 succeeded = true
                 break
-            } catch let error as URLError where Self.isRetryable(error) {
-                logger.warning("Transient network error (attempt \(attempt + 1)/\(maxRetries + 1), code=\(error.code.rawValue)): \(error.localizedDescription, privacy: .public)")
-                lastError = error
-                continue
-            } catch let error as URLError where error.code == .timedOut {
-                logger.error("Transcription request timed out")
-                throw APIError.timeout
-            } catch {
-                logger.error("Network error: \(error.localizedDescription, privacy: .public)")
-                throw APIError.networkError(error)
             }
+
+            let status = httpResponse.statusCode
+            let retryable = status == 429 || (500...599).contains(status)
+            if retryable && attempt < maxRetries {
+                nextDelaySeconds = Self.httpBackoffSeconds(status: status, response: httpResponse, attempt: attempt)
+                logger.warning("HTTP \(status) — retrying after \(nextDelaySeconds)s (attempt \(attempt + 1)/\(maxRetries + 1))")
+                continue
+            }
+
+            // Either a final status (2xx/4xx-non-429) or exhausted retries on a retryable status.
+            // Fall through to the switch below which handles all status codes uniformly.
+            lastError = nil
+            succeeded = true
+            break
         }
 
         if !succeeded {
@@ -268,6 +317,26 @@ final class APIClient: Sendable {
         default:
             return false
         }
+    }
+
+    /// Exponential backoff for transient network errors: 2s, 5s, 10s.
+    private static func networkBackoffSeconds(attempt: Int) -> UInt64 {
+        switch attempt {
+        case 0: return 2
+        case 1: return 5
+        default: return 10
+        }
+    }
+
+    /// Backoff for retryable HTTP statuses. Honors Retry-After on 429
+    /// (seconds form; capped at 30 s). Falls back to exponential 2/5/10 s.
+    private static func httpBackoffSeconds(status: Int, response: HTTPURLResponse, attempt: Int) -> UInt64 {
+        if status == 429,
+           let retryAfter = response.value(forHTTPHeaderField: "Retry-After"),
+           let seconds = UInt64(retryAfter.trimmingCharacters(in: .whitespaces)) {
+            return min(seconds, 30)
+        }
+        return networkBackoffSeconds(attempt: attempt)
     }
 }
 

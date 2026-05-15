@@ -23,8 +23,9 @@ final class TranscriptionManager {
     private init() {}
 
     /// Minimum valid m4a file size: AAC container has overhead, so minimum meaningful recording
-    /// is larger than the old WAV minimum. ~4KB covers AAC container + ~0.1s of audio at 32kbps.
-    private let minimumFileSize: Int64 = 4_000
+    /// is larger than the old WAV minimum. ~8KB ≈ 2s of audio at 32kbps + container overhead;
+    /// anything smaller is either an accidental tap or a header-only stub that Whisper rejects.
+    private let minimumFileSize: Int64 = 8_000
 
     /// Process a recorded audio file and transcribe it
     /// - Parameter audioURL: URL to the recorded WAV file
@@ -46,6 +47,18 @@ final class TranscriptionManager {
                 userInfo: ["error": APIError.invalidResponse]
             )
             return nil
+        }
+
+        // Guarantee temp-file cleanup on every exit path (success, API failure, network
+        // error, validation rejection). Without this, /var/folders/.../T/ accumulates
+        // recording-*.m4a files indefinitely and eventually starves new recordings.
+        defer {
+            do {
+                try fileManager.removeItem(at: audioURL)
+                logger.info("Cleaned up temp audio: \(audioURL.lastPathComponent, privacy: .public)")
+            } catch {
+                logger.warning("Failed to clean up temp audio \(audioURL.lastPathComponent, privacy: .public): \(error.localizedDescription, privacy: .public)")
+            }
         }
 
         if let attrs = try? fileManager.attributesOfItem(atPath: audioURL.path),
@@ -72,8 +85,9 @@ final class TranscriptionManager {
         )
 
         do {
+            let prompt = transcriptionPrompt(for: language)
             logger.info("Starting transcription for: \(audioURL.lastPathComponent, privacy: .public)")
-            let result = try await APIClient.shared.transcribe(audioURL: audioURL, language: language)
+            let result = try await APIClient.shared.transcribe(audioURL: audioURL, language: language, prompt: prompt)
             logger.info("Transcription complete: \(result.text.prefix(80), privacy: .public)")
 
             // Post notification for Phase 4 paste integration
@@ -122,6 +136,31 @@ final class TranscriptionManager {
                 userInfo: ["error": error]
             )
             return nil
+        }
+    }
+
+    // MARK: - Whisper Prompt
+
+    /// Build the `prompt` value sent to Groq Whisper to bias vocabulary, capitalization,
+    /// and punctuation toward the user's actual domain (AI/software development with Claude Code).
+    ///
+    /// Language-aware on purpose: a full English sentence in the prompt would bias `auto`
+    /// detection toward English. For `auto` we use bare terminology (no sentence structure
+    /// → no language bias). For explicit `en`/`de` we provide a punctuated sample so Whisper
+    /// mimics that punctuation style. ~120 tokens max (Whisper limit is ~224).
+    private func transcriptionPrompt(for language: String?) -> String {
+        switch language {
+        case "en":
+            return """
+            Working with Claude Code, ChatGPT, and the Anthropic API. I use TypeScript, Python, Swift, and Rust to build AI-powered applications. The MCP server connects to backends via REST and GraphQL endpoints. After refactoring the async function, I deploy via GitHub Actions and verify on Vercel. Topics include LLMs, RAG, embeddings, vector databases, prompt engineering, agents, and tool use. Frameworks: React, Next.js, Vue, Svelte, Tauri, Supabase, Tailwind.
+            """
+        case "de":
+            return """
+            Ich arbeite mit Claude Code, ChatGPT und der Anthropic-API. Ich nutze TypeScript, Python, Swift und Rust, um KI-gestützte Anwendungen zu bauen. Der MCP-Server verbindet Backends über REST und GraphQL. Nach dem Refactoring der async-Funktion deploye ich über GitHub Actions und verifiziere auf Vercel. Themen: LLMs, RAG, Embeddings, Vektor-Datenbanken, Prompt Engineering, Agents, Tool Use. Frameworks: React, Next.js, Vue, Svelte, Tauri, Supabase, Tailwind.
+            """
+        default:
+            // language == nil (auto-detect): bare vocabulary list, no sentence structure → no language bias.
+            return "Claude Code, Anthropic, ChatGPT, OpenAI, Cursor, Sonnet, Opus, Haiku, MCP, RAG, LLM, async, await, TypeScript, Python, Swift, Rust, GitHub, Docker, Kubernetes, AWS, Vercel, Supabase, React, Next.js, Vue, Svelte, REST, GraphQL, JSON, YAML, SQL, PostgreSQL, MongoDB, Redis, webhook, repository, refactor, deployment, debugging, framework, callback, idempotent, prompt engineering, vector database, embedding, agent, tool use."
         }
     }
 }

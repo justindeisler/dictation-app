@@ -277,6 +277,21 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, UNUserNotifi
                 }
             }
         }
+
+        // Watchdog: if the icon is still in .processing after 90s, the transcription
+        // pipeline silently failed to post a complete/fail notification (e.g. Task
+        // cancellation, programmer error in a future change). Reset to .idle so the
+        // user isn't stuck looking at a fake "Transcribing..." indicator forever.
+        if state == .processing {
+            Task { @MainActor in
+                try? await Task.sleep(nanoseconds: 90_000_000_000)
+                if self.currentIconState == .processing {
+                    print("WARN: Processing state stuck >90s — forcing reset to idle")
+                    self.statusItem?.button?.toolTip = "DictationApp"
+                    self.updateMenuBarIcon(state: .idle)
+                }
+            }
+        }
     }
 
     private func setupMenuBar() {
